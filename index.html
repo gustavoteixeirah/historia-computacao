@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>História da Computação</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d1117;--sf0:#161b22;--sf1:#1c2128;--sf2:#21262d;
+  --txt:#e6edf3;--dim:#7d8590;--mut:#30363d;--bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.14);
+  --blue:#58a6ff;--green:#3fb950;--orange:#f0883e;--purple:#a371f7;
+  --red:#ff7b72;--cyan:#56d4dd;--yellow:#e3b341;--lavender:#c9d1d9;
+  --acc:var(--blue);
+}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--txt);font-family:'Manrope',sans-serif;line-height:1.6;font-size:16px}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--bd) 1px,transparent 1px),linear-gradient(90deg,var(--bd) 1px,transparent 1px);background-size:50px 50px}
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--acc);transition:width .4s ease,background .6s ease;z-index:200}
+#secbar{position:fixed;bottom:0;left:0;right:0;height:3px;background:var(--acc);opacity:.5;transition:background .6s ease;z-index:200}
+#nav{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:8px;z-index:100}
+.nbtn{background:var(--sf1);border:1px solid var(--bd2);color:var(--dim);width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s;user-select:none}
+.nbtn:hover:not(:disabled){border-color:var(--acc);color:var(--acc)}
+.nbtn:disabled{opacity:.2;cursor:default}
+.dots{display:flex;gap:5px;align-items:center;padding:0 6px}
+.dot{width:8px;height:8px;border-radius:4px;background:var(--mut);cursor:pointer;transition:all .25s}
+.dot.on{background:var(--acc);box-shadow:0 0 8px var(--acc);width:24px}
+.dot:hover:not(.on){background:var(--dim)}
+#sctr{position:fixed;bottom:22px;right:22px;font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--mut);z-index:100}
+#hint{position:fixed;bottom:22px;left:22px;font-size:13px;color:var(--mut);z-index:100;display:flex;gap:4px;align-items:center}
+.kk{background:var(--sf1);border:1px solid var(--bd2);border-radius:3px;padding:1px 5px;font-family:'JetBrains Mono',monospace;font-size:11px}
+#deck{position:fixed;inset:0;z-index:1}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px 28px 52px;opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease;pointer-events:none;overflow:hidden}
+.slide.on{opacity:1;transform:translateY(0);pointer-events:all}
+.shead{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:100%;margin-bottom:10px}
+.snum{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--mut);letter-spacing:2px}
+.stag{font-size:13px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid;font-family:'JetBrains Mono',monospace}
+.syear{font-family:'JetBrains Mono',monospace;font-size:14px;color:var(--dim);opacity:.7}
+.ttl{font-family:'Syne',sans-serif;font-size:clamp(1.4rem,3vw,2.4rem);font-weight:700;line-height:1.15;text-align:center;margin-bottom:6px;max-width:100%}
+.sub{font-size:1.05rem;color:var(--dim);text-align:center;margin-bottom:12px;max-width:100%}
+.sbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px;width:100%;max-width:100%;align-items:start}
+.sbody.wide{grid-template-columns:minmax(0,1.2fr) minmax(0,1.8fr)}
+.simg{border-radius:10px;overflow:hidden;background:var(--sf1);border:1px solid var(--bd);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;min-width:0}
+.simg.sq{aspect-ratio:1/1}
+.simg.tall{aspect-ratio:3/4}
+.simg img{width:100%;height:100%;object-fit:cover;display:block}
+.simg.logo img{object-fit:contain;padding:12px}
+.stxt{display:flex;flex-direction:column;gap:8px;min-width:0}
+.stxt p{font-size:14.5px;color:var(--dim);line-height:1.65}
+.stxt p strong{color:var(--txt)}
+.bullets{display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.bullet{display:flex;align-items:flex-start;gap:8px;font-size:13.5px;color:var(--dim);padding:6px 10px;background:var(--sf1);border-radius:6px;border-left:3px solid var(--acc)}
+.bullet strong{color:var(--txt);flex-shrink:0}
+.quote{padding:10px 14px;border-left:3px solid var(--acc);background:var(--sf0);border-radius:0 8px 8px 0;font-style:italic;font-size:13.5px;color:var(--txt);margin-top:6px}
+/* COVER */
+.cover-slide{background:radial-gradient(ellipse at 50% 35%,rgba(88,166,255,.07) 0%,transparent 70%)}
+.cover-slide .ttl{font-size:clamp(2.2rem,4.5vw,3.5rem);font-weight:800;margin-bottom:10px}
+.cover-img{width:100%;max-width:500px;height:130px;border-radius:12px;overflow:hidden;border:1px solid var(--bd);opacity:.65}
+.cover-img img{width:100%;height:100%;object-fit:cover}
+.cover-badges{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.era-badge{font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid;font-family:'JetBrains Mono',monospace;opacity:.75}
+/* TIMELINE */
+.tl-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;width:100%;max-width:100%}
+.timeline{display:flex;flex-direction:column;position:relative}
+.timeline::before{content:'';position:absolute;left:0;top:8px;bottom:8px;width:2px;background:var(--mut)}
+.tl-item{display:flex;gap:18px;align-items:flex-start;padding:9px 0 9px 22px;position:relative}
+.tl-item::before{content:'';position:absolute;left:-4px;top:17px;width:10px;height:10px;border-radius:50%;background:var(--acc);border:2px solid var(--bg)}
+.tl-date{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--acc);font-weight:700;min-width:80px;padding-top:2px;flex-shrink:0}
+.tl-text{font-size:14.5px;color:var(--dim);line-height:1.5}
+.tl-text strong{color:var(--txt)}
+/* BOOL OPS */
+.bool-ops{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px}
+.bool-op{background:var(--sf0);border:1px solid var(--bd);border-radius:8px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:17px;font-weight:700;text-align:center;opacity:.3}
+.bool-op small{display:block;font-size:12px;font-weight:400;margin-top:2px;opacity:.7}
+.bool-op.b-and{color:var(--green);border-color:var(--green)}
+.bool-op.b-or{color:var(--blue);border-color:var(--blue)}
+.bool-op.b-not{color:var(--red);border-color:var(--red)}
+.bool-op.b-xor{color:var(--yellow);border-color:var(--yellow)}
+.slide.on .bool-op.b-and{animation:fadein .4s ease .6s both}
+.slide.on .bool-op.b-or{animation:fadein .4s ease .9s both}
+.slide.on .bool-op.b-not{animation:fadein .4s ease 1.2s both}
+.slide.on .bool-op.b-xor{animation:fadein .4s ease 1.5s both}
+@keyframes fadein{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+/* COUNTER */
+.ctr-block{margin-top:10px}
+.ctr-lbl{font-family:'JetBrains Mono',monospace;font-size:12px;text-transform:uppercase;letter-spacing:2px;color:var(--mut);margin-bottom:4px}
+.ctr-val{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--green)}
+.ctr-sub{font-size:13px;color:var(--mut);margin-top:2px}
+/* TYPEWRITER */
+.typewr{background:var(--sf0);border:1px solid var(--bd);border-radius:8px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:1.9;margin-top:8px}
+.typewr .tw-line{white-space:nowrap;overflow:hidden;width:0}
+.typewr .tw-green{color:var(--green)}
+.typewr .tw-cyan{color:var(--cyan)}
+.typewr .tw-dim{color:var(--mut)}
+.typewr .tw-txt{color:var(--txt)}
+.slide.on .typewr .tw-line:nth-child(1){animation:typing 1s steps(35,end) .5s both}
+.slide.on .typewr .tw-line:nth-child(2){animation:typing 1.2s steps(38,end) 1.6s both}
+.slide.on .typewr .tw-line:nth-child(3){animation:typing .8s steps(25,end) 2.9s both}
+.slide.on .typewr .tw-line:nth-child(4){animation:typing 1.4s steps(45,end) 3.8s both}
+.slide.on .typewr .tw-line:nth-child(5){animation:typing .9s steps(28,end) 5.3s both}
+@keyframes typing{from{width:0}to{width:100%}}
+/* PONG */
+.pong{position:relative;background:#000;border:1px solid var(--bd2);border-radius:8px;width:100%;height:110px;overflow:hidden;margin-top:8px}
+.pong-ball{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;animation:pb-x 3s linear infinite,pb-y 2.3s ease-in-out infinite}
+.pong-p1{position:absolute;left:10px;width:7px;height:32px;background:#fff;border-radius:4px;animation:pp1 2.3s ease-in-out infinite}
+.pong-p2{position:absolute;right:10px;width:7px;height:32px;background:#fff;border-radius:4px;animation:pp2 2.3s ease-in-out infinite .4s}
+.pong-net{position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed rgba(255,255,255,.2)}
+@keyframes pb-x{0%,100%{left:16px}50%{left:calc(100% - 25px)}}
+@keyframes pb-y{0%,100%{top:50%}25%{top:15%}75%{top:72%}}
+@keyframes pp1{0%,100%{top:calc(50% - 16px)}25%{top:8%}75%{top:calc(82% - 32px)}}
+@keyframes pp2{0%,100%{top:calc(50% - 16px)}25%{top:calc(82% - 32px)}75%{top:8%}}
+/* NEURAL */
+.neural{display:flex;align-items:center;justify-content:space-around;padding:12px;margin-top:8px;background:var(--sf0);border:1px solid var(--bd);border-radius:8px}
+.nlayer{display:flex;flex-direction:column;gap:7px;align-items:center}
+.nl-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--mut);letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;text-align:center}
+.nnode{width:20px;height:20px;border-radius:50%;background:var(--sf2);border:1.5px solid var(--bd2);opacity:.35}
+.slide.on .nnode{animation:npulse 1.5s ease-in-out infinite}
+.nlayer:nth-child(1) .nnode:nth-child(2){animation-delay:.1s}
+.nlayer:nth-child(1) .nnode:nth-child(3){animation-delay:.2s}
+.nlayer:nth-child(1) .nnode:nth-child(4){animation-delay:.35s}
+.nlayer:nth-child(3) .nnode:nth-child(1){animation-delay:.2s}
+.nlayer:nth-child(3) .nnode:nth-child(2){animation-delay:.4s}
+.nlayer:nth-child(3) .nnode:nth-child(3){animation-delay:.55s}
+.nlayer:nth-child(3) .nnode:nth-child(4){animation-delay:.7s}
+.nlayer:nth-child(3) .nnode:nth-child(5){animation-delay:.9s}
+.nlayer:nth-child(5) .nnode:nth-child(1){animation-delay:.45s}
+.nlayer:nth-child(5) .nnode:nth-child(2){animation-delay:.65s}
+.nlayer:nth-child(5) .nnode:nth-child(3){animation-delay:.85s}
+.nlayer:nth-child(7) .nnode:nth-child(1){animation-delay:.8s}
+.nlayer:nth-child(7) .nnode:nth-child(2){animation-delay:1s}
+@keyframes npulse{0%,100%{opacity:.3;background:var(--sf2)}50%{opacity:1;background:var(--purple);border-color:var(--purple)}}
+/* QUANTUM */
+.quant{width:56px;height:56px;border-radius:50%;border:2px solid var(--cyan);animation:qosc 2s ease-in-out infinite;position:relative;flex-shrink:0;margin-top:10px}
+.quant::after{content:'';position:absolute;inset:5px;border-radius:50%;background:radial-gradient(rgba(86,212,221,.3),transparent);animation:qosc2 2s ease-in-out infinite}
+@keyframes qosc{0%,100%{border-color:var(--cyan);box-shadow:0 0 10px var(--cyan)}50%{border-color:var(--purple);box-shadow:0 0 18px var(--purple)}}
+@keyframes qosc2{0%,100%{background:radial-gradient(rgba(86,212,221,.25),transparent)}50%{background:radial-gradient(rgba(163,113,247,.35),transparent)}}
+/* MOORE */
+.moore-wrap{margin-top:8px;background:var(--sf0);border:1px solid var(--bd);border-radius:8px;padding:10px 12px}
+.moore-wrap svg path.mline{stroke-dasharray:600;stroke-dashoffset:600}
+.slide.on .moore-wrap svg path.mline{animation:drawpath 2.5s ease .5s forwards}
+@keyframes drawpath{to{stroke-dashoffset:0}}
+/* ABACUS */
+.abacus-wrap{display:flex;flex-direction:column;align-items:center;width:100%;max-width:100%;gap:6px}
+.abacus-board{display:flex;background:linear-gradient(145deg,#3e2723,#5d4037);border-radius:10px;padding:8px 10px;border:3px solid #795548;box-shadow:inset 0 2px 8px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.4);gap:2px}
+.abacus-rod{position:relative;width:42px;height:154px}
+.abacus-rod::before{content:'';position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);background:linear-gradient(180deg,#bfa882,#8d6e63);border-radius:2px;z-index:0}
+.abacus-rod::after{content:'';position:absolute;left:-1px;right:-1px;top:48px;height:4px;background:#a1887f;z-index:3;border-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,.4)}
+.ab{width:34px;height:20px;border-radius:10px;cursor:pointer;position:absolute;left:50%;transform:translateX(-50%);z-index:2;background:radial-gradient(ellipse at 50% 30%,#ffcc80,#f57c00);border:1.5px solid #e65100;box-shadow:0 2px 3px rgba(0,0,0,.3),inset 0 1px 2px rgba(255,255,255,.25);transition:top .25s cubic-bezier(.4,0,.2,1)}
+.ab:hover{filter:brightness(1.15);z-index:4}
+.ab.on{background:radial-gradient(ellipse at 50% 30%,#fff3e0,#ffb74d);border-color:#ff9800;box-shadow:0 0 6px rgba(255,152,0,.35),0 2px 3px rgba(0,0,0,.3)}
+.abacus-val{font-family:'JetBrains Mono',monospace;font-size:2rem;font-weight:700;color:var(--orange);text-shadow:0 0 12px rgba(240,136,62,.3);letter-spacing:4px}
+.abacus-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mut);letter-spacing:2px;text-transform:uppercase}
+.abacus-labels{display:flex;gap:2px;padding:0 10px}
+.abacus-labels span{width:42px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);opacity:.6}
+.abacus-hint{font-size:12px;color:var(--dim);text-align:center}
+.abacus-hint strong{color:var(--orange)}
+/* NAPIER BONES */
+.napier-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:8px}
+.napier-top{display:flex;align-items:center;gap:16px}
+.napier-grid{display:grid;gap:0;border:2px solid #795548;border-radius:6px;overflow:hidden;background:#3e2723}
+.np-hdr{cursor:pointer;user-select:none}
+.np-hdr:hover:not(.np-corner){background:#6d4c41}
+.np-hdr{background:#5d4037;color:var(--txt);font-family:'Syne',sans-serif;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;height:30px;border-bottom:2px solid #795548}
+.np-hdr.np-corner{font-size:11px;color:var(--dim);font-weight:400;font-family:'JetBrains Mono',monospace}
+.np-mult{background:#4e342e;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;height:28px;cursor:pointer;transition:all .15s;border-bottom:1px solid rgba(121,85,72,.4)}
+.np-mult:hover{background:#6d4c41;color:var(--txt)}
+.np-mult.active{background:var(--orange);color:#fff}
+.np-cell{position:relative;height:28px;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);border-bottom:1px solid rgba(121,85,72,.4);border-left:1px solid rgba(121,85,72,.4);overflow:hidden;transition:background .2s}
+.np-cell::before{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(to bottom right,transparent calc(50% - .5px),rgba(255,255,255,.1) calc(50% - .5px),rgba(255,255,255,.1) calc(50% + .5px),transparent calc(50% + .5px));pointer-events:none;z-index:1}
+.np-cell .np-t{position:absolute;top:2px;left:6px;font-size:11px;z-index:2}
+.np-cell .np-o{position:absolute;bottom:2px;right:6px;font-size:11px;z-index:2}
+.np-cell.active{background:rgba(240,136,62,.15)}
+.np-cell.active .np-t,.np-cell.active .np-o{color:var(--txt)}
+.np-cell .np-t.dg,.np-cell .np-o.dg{font-weight:700;transition:color .3s}
+.dg-0{color:var(--cyan)!important}.dg-1{color:var(--green)!important}.dg-2{color:var(--orange)!important}.dg-3{color:var(--purple)!important}
+.napier-result{display:flex;align-items:center;gap:12px;margin-top:4px}
+.napier-eq{font-family:'JetBrains Mono',monospace;font-size:15px;color:var(--dim)}
+.napier-eq strong{color:var(--txt);font-size:17px}
+.napier-diags{display:flex;gap:4px;align-items:center}
+.napier-dg{font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 6px;border-radius:4px;border:1px solid;opacity:0;transition:opacity .3s}
+.napier-dg.show{opacity:1}
+.napier-hint{font-size:11px;color:var(--dim);text-align:center}
+.napier-hint strong{color:var(--orange)}
+/* PASCALINE */
+.pascal-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:8px}
+.pascal-machine{background:linear-gradient(160deg,#5d4e37,#3e3428,#2e2620);border-radius:12px;padding:14px 20px 18px;border:2px solid #6d5c45;box-shadow:0 6px 24px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06);display:flex;flex-direction:column;align-items:center;gap:12px;position:relative}
+.pascal-machine::before{content:'PASCALINE · 1642';position:absolute;top:6px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:3px;color:rgba(255,255,255,.15);text-transform:uppercase}
+.pascal-wheels{display:flex;gap:6px;align-items:center}
+.pascal-wheel{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pascal-wlbl{font-family:'JetBrains Mono',monospace;font-size:8px;color:rgba(255,255,255,.2);letter-spacing:1px}
+.pascal-drum{width:48px;height:52px;border-radius:8px;background:linear-gradient(180deg,#1a1a1a,#2a2a2a,#1a1a1a);border:2px solid #444;overflow:hidden;position:relative;box-shadow:inset 0 0 12px rgba(0,0,0,.6),0 2px 4px rgba(0,0,0,.4)}
+.pascal-drum-inner{position:absolute;left:0;right:0;transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;align-items:center}
+.pascal-dg{width:100%;height:52px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:26px;font-weight:700;color:#ccc;flex-shrink:0;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+.pascal-drum::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.5) 0%,transparent 30%,transparent 70%,rgba(0,0,0,.5) 100%);pointer-events:none;z-index:2;border-radius:6px}
+.pascal-drum.carry .pascal-dg{color:var(--orange);text-shadow:0 0 8px rgba(240,136,62,.4)}
+.pascal-btns{display:flex;gap:4px;margin-top:2px}
+.pascal-btn{width:22px;height:22px;border-radius:50%;border:1.5px solid #555;background:linear-gradient(180deg,#3a3a3a,#252525);color:#aaa;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'JetBrains Mono',monospace;line-height:1}
+.pascal-btn:hover{border-color:var(--orange);color:var(--orange);background:linear-gradient(180deg,#4a3a2a,#352a1a)}
+.pascal-btn:active{transform:scale(.9)}
+.pascal-display{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;color:var(--orange);letter-spacing:6px;text-shadow:0 0 10px rgba(240,136,62,.25)}
+.pascal-resetbtn{background:none;border:1px solid #444;border-radius:6px;padding:4px 10px;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:11px;cursor:pointer;transition:all .15s}
+.pascal-resetbtn:hover{border-color:var(--dim);color:var(--txt)}
+.pascal-hint{font-size:11px;color:var(--dim);text-align:center}
+.pascal-hint strong{color:var(--orange)}
+/* HOLLERITH */
+.holl-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+.holl-machine{position:relative;display:flex;flex-direction:column;align-items:center;gap:0;width:340px}
+.holl-needles{display:flex;gap:6px;justify-content:center;height:28px;position:relative;z-index:10}
+.holl-needle{width:36px;display:flex;justify-content:center;position:relative}
+.holl-needle::after{content:'';width:3px;height:22px;background:linear-gradient(180deg,#888,#aaa);border-radius:0 0 1px 1px;position:absolute;top:0;z-index:10;transition:transform .5s,background .4s,box-shadow .4s}
+.holl-needle.fire::after{background:var(--yellow);box-shadow:0 0 10px var(--yellow);transform:translateY(24px)}
+.holl-needle.miss::after{transform:translateY(10px)}
+.holl-card-zone{height:48px;display:flex;align-items:center;justify-content:center;position:relative;overflow:visible;width:100%;z-index:1}
+.holl-card{display:flex;gap:6px;background:#e8dcc8;border-radius:4px;padding:6px 10px;border:1px solid #c4b89a;position:absolute;transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .5s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.holl-card.enter{transform:translateY(-50px);opacity:0}
+.holl-card.reading{transform:translateY(0);opacity:1}
+.holl-card.exit{transform:translateY(50px);opacity:0}
+.holl-hole{width:32px;height:32px;border-radius:3px;border:1.5px solid #b0a48c;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:8px;color:#8a7e6a;background:#ddd2be;position:relative;transition:all .3s}
+.holl-hole.punched{background:#1a1a1a;border-color:#555;color:transparent;box-shadow:inset 0 1px 4px rgba(0,0,0,.6)}
+.holl-hole.spark{box-shadow:inset 0 0 6px var(--yellow),0 0 8px var(--yellow)}
+.holl-counters{display:flex;gap:6px;justify-content:center;margin-top:4px}
+.holl-ctr{display:flex;flex-direction:column;align-items:center;gap:2px;width:36px}
+.holl-ctr-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--dim);transition:all .15s;min-height:24px}
+.holl-ctr-val.bump{color:var(--yellow);text-shadow:0 0 6px var(--yellow);transform:scale(1.2)}
+.holl-ctr-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--dim);text-align:center;line-height:1.2;letter-spacing:.5px}
+.holl-go{background:linear-gradient(180deg,#5d4037,#3e2723);border:1.5px solid #795548;border-radius:8px;padding:6px 20px;color:var(--orange);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;letter-spacing:1px}
+.holl-go:hover{background:linear-gradient(180deg,#6d4c41,#4e342e);border-color:var(--orange)}
+.holl-go:disabled{opacity:.4;cursor:default}
+.holl-status{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);min-height:16px;text-align:center}
+.holl-status strong{color:var(--txt)}
+.holl-pile{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mut)}
+.holl-resetbtn{background:none;border:1px solid #444;border-radius:6px;padding:3px 10px;color:var(--dim);font-family:'JetBrains Mono',monospace;font-size:10px;cursor:pointer;transition:all .15s}
+.holl-resetbtn:hover{border-color:var(--dim);color:var(--txt)}
+/* BOOLE CIRCUIT */
+.boole-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+.boole-inputs{display:flex;gap:12px;align-items:center;flex-wrap:wrap;justify-content:center}
+.boole-sw{display:flex;align-items:center;gap:5px;cursor:pointer;user-select:none}
+.boole-sw-lbl{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:#888;transition:color .2s;min-width:16px}
+.boole-sw-lbl.on{color:var(--green)}
+.boole-toggle{width:40px;height:22px;border-radius:11px;background:var(--sf2);border:2px solid #555;position:relative;transition:all .25s;cursor:pointer}
+.boole-toggle.on{background:rgba(63,185,80,.15);border-color:var(--green)}
+.boole-toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#888;transition:all .25s}
+.boole-toggle.on::after{left:20px;background:var(--green);box-shadow:0 0 6px rgba(63,185,80,.4)}
+.boole-sw-tag{font-family:'JetBrains Mono',monospace;font-size:11px;color:#888;max-width:60px;line-height:1.2}
+.boole-svg-wrap{width:100%;max-width:540px}
+.boole-svg-wrap svg{width:100%;height:auto}
+.boole-svg-wrap svg text{font-family:'JetBrains Mono',monospace}
+.bw{stroke:#555;stroke-width:3;fill:none;transition:stroke .3s,filter .3s}
+.bw.hi{stroke:#3fb950;filter:drop-shadow(0 0 5px rgba(63,185,80,.5))}
+.bgat{fill:var(--sf0);stroke:#888;stroke-width:2.5;transition:stroke .3s,fill .3s}
+.bgat.hi{stroke:#3fb950;fill:rgba(63,185,80,.08)}
+.bvl{font-size:18px;font-weight:700;fill:#888;transition:fill .3s}
+.bvl.hi{fill:#3fb950}
+.btg{font-size:12px;fill:#aaa;font-weight:700}
+.bout{font-size:22px;font-weight:700;fill:#888;transition:fill .3s}
+.bout.hi{fill:var(--green)}
+.boole-expr{font-family:'JetBrains Mono',monospace;font-size:14px;color:#aaa;text-align:center;line-height:1.6}
+.boole-expr strong{color:var(--txt)}
+.boole-expr .bx-hi{color:var(--green);font-weight:700}
+.boole-expr .bx-lo{color:var(--red);font-weight:700}
+/* PARTICLES */
+.particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.pt{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--acc);opacity:0}
+.slide.on .pt{animation:ptfloat var(--d,6s) ease-in-out var(--dl,0s) infinite}
+@keyframes ptfloat{0%{opacity:0;transform:translate(0,0)}20%{opacity:.8}80%{opacity:.5}100%{opacity:0;transform:translate(var(--tx,30px),var(--ty,-60px))}}
+/* ENTRY ANIMS */
+.slide.on .shead{animation:fadein .4s ease .1s both}
+.slide.on .ttl{animation:fadein .5s ease .2s both}
+.slide.on .sub{animation:fadein .5s ease .3s both}
+.slide.on .sbody,.slide.on .tl-grid{animation:fadein .5s ease .35s both}
+.slide.on .cover-img{animation:fadein .7s ease .4s both}
+.slide.on .cover-badges .era-badge{animation:fadein .4s ease calc(.6s + var(--di,0) * .08s) both}
+@keyframes fadeup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.cover-slide.on .ttl{animation:fadeup .8s ease .1s both}
+.cover-slide.on .sub{animation:fadeup .8s ease .35s both}
+/* SECTION COLORS */
+.si .stag{color:var(--blue);border-color:var(--blue)}
+.sp .stag{color:var(--orange);border-color:var(--orange)}
+.s1g .stag{color:var(--red);border-color:var(--red)}
+.s2g .stag{color:var(--green);border-color:var(--green)}
+.s3g .stag{color:var(--cyan);border-color:var(--cyan)}
+.s4g .stag{color:var(--purple);border-color:var(--purple)}
+.spc .stag{color:var(--yellow);border-color:var(--yellow)}
+.sw .stag{color:var(--blue);border-color:var(--blue)}
+.sm .stag{color:var(--green);border-color:var(--green)}
+.sa .stag{color:var(--purple);border-color:var(--purple)}
+.sf .stag{color:var(--lavender);border-color:var(--lavender)}
+.si .bullet{border-left-color:var(--blue)}
+.sp .bullet{border-left-color:var(--orange)}
+.s1g .bullet{border-left-color:var(--red)}
+.s2g .bullet{border-left-color:var(--green)}
+.s3g .bullet{border-left-color:var(--cyan)}
+.s4g .bullet{border-left-color:var(--purple)}
+.spc .bullet{border-left-color:var(--yellow)}
+.sw .bullet{border-left-color:var(--blue)}
+.sm .bullet{border-left-color:var(--green)}
+.sa .bullet{border-left-color:var(--purple)}
+.sf .bullet{border-left-color:var(--lavender)}
+</style>
+</head>
+<body>
+<div id="prog"></div>
+<div id="secbar"></div>
+<div id="deck"></div>
+<div id="nav">
+  <button class="nbtn" id="btn-prev">←</button>
+  <div class="dots" id="dots"></div>
+  <button class="nbtn" id="btn-next">→</button>
+</div>
+<div id="sctr">01 / 65</div>
+<div id="hint"><span class="kk">←</span><span class="kk">→</span> navegar &nbsp;·&nbsp; <span class="kk">F</span> fullscreen</div>
+
+<script>
+const SECS=[
+  {name:'Introdução',       cls:'si',  color:'#58a6ff',first:0, last:1 },
+  {name:'Pré-Computadores', cls:'sp',  color:'#f0883e',first:2, last:13},
+  {name:'1ª Geração',       cls:'s1g', color:'#ff7b72',first:14,last:22},
+  {name:'2ª Geração',       cls:'s2g', color:'#3fb950',first:23,last:27},
+  {name:'3ª Geração',       cls:'s3g', color:'#56d4dd',first:28,last:32},
+  {name:'4ª Geração',       cls:'s4g', color:'#a371f7',first:33,last:39},
+  {name:'Era dos PCs',      cls:'spc', color:'#e3b341',first:40,last:46},
+  {name:'Internet & Web',   cls:'sw',  color:'#58a6ff',first:47,last:53},
+  {name:'Mobile & Nuvem',   cls:'sm',  color:'#3fb950',first:54,last:58},
+  {name:'IA',               cls:'sa',  color:'#a371f7',first:59,last:62},
+  {name:'O Futuro',         cls:'sf',  color:'#c9d1d9',first:63,last:64},
+];
+const sOf=i=>SECS.find(s=>i>=s.first&&i<=s.last)||SECS[0];
+const TH='https://upload.wikimedia.org/wikipedia/commons/thumb/';
+const WK='https://upload.wikimedia.org/wikipedia/commons/';
+
+const D=[
+/* 0 */ {cov:true,year:'',title:'História da Computação',sub:'Do Ábaco à Inteligência Artificial',img:TH+'7/7e/Apple_II_IMG_4212.jpg/1280px-Apple_II_IMG_4212.jpg',txt:'Uma jornada de milênios — das primeiras ferramentas de cálculo a processadores com bilhões de transistores e à inteligência artificial. Cada era transformou para sempre a sociedade.'},
+/* 1 */ {year:'3000 a.C. → hoje',title:'Uma Jornada de Milênios',tl:[['~3000 a.C.','<strong>Ábaco</strong> — primeiro instrumento de cálculo'],['1614','<strong>Napier</strong> — logaritmos e ossos de marfim'],['1642','<strong>Pascalina</strong> — primeira calculadora mecânica'],['1822','<strong>Babbage</strong> — máquina diferencial analítica'],['1843','<strong>Ada Lovelace</strong> — primeiro algoritmo de máquina'],['1936','<strong>Turing</strong> — fundamentos teóricos da computação'],['1946','<strong>ENIAC</strong> — primeiro computador eletrônico'],['1971','<strong>Intel 4004</strong> — primeiro microprocessador'],['1991','<strong>World Wide Web</strong> — internet pública global'],['2022','<strong>ChatGPT / LLMs</strong> — era da IA generativa']]},
+/* 2 */ {year:'~3000 a.C.',title:'O Ábaco — A Primeira Calculadora da Humanidade',img:TH+'a/af/Abacus_6.png/1280px-Abacus_6.png',txt:'Por volta de 3000 a.C., na Babilônia, surgiu o <strong>ábaco</strong> — o primeiro instrumento de cálculo da história. Consistia em contas deslizantes sobre hastes dentro de uma moldura de madeira, permitindo realizar as quatro operações aritméticas.',t2:'O ábaco se espalhou pela China, Egito, Grécia e Roma. Representa o primeiro esforço humano consciente de criar uma ferramenta externa para auxiliar o raciocínio matemático. Ainda é usado em algumas culturas hoje.'},
+/* 3 */ {year:'~3000 a.C.',title:'Como Funciona o Ábaco',abacus:true,txt:'O ábaco chinês (<strong>suanpan</strong>) tem hastes verticais com contas divididas por uma barra central. Acima: cada conta vale <strong>5</strong>. Abaixo: cada conta vale <strong>1</strong>. Clique nas contas para mover e somar valores.'},
+/* 4 */ {year:'~4000 a.C.',title:'As Primeiras Notações Numéricas',img:WK+'c/ca/Cuneiform_script2.jpg',txt:'Entre 4000 e 1200 a.C., os <strong>sumérios</strong> registravam transações em tábuas de argila. Desenvolveram um sistema de numeração posicional de <strong>base 60 (sexagesimal)</strong> — ainda usada para medir tempo (60 segundos, 60 minutos) e ângulos.',t2:'Paralelamente, os egípcios criavam hieróglifos numéricos e os gregos desenvolviam a geometria. Esses sistemas formam a base conceitual sobre a qual toda computação é construída.'},
+/* 5 */ {year:'1614',title:'John Napier e os Logaritmos',img:TH+'7/73/Napier%27s_Bones.JPG/1024px-Napier%27s_Bones.JPG',txt:'O matemático escocês <strong>John Napier</strong> publicou, entre 1612 e 1614, um sistema baseado em logaritmos que reduzia multiplicações e divisões a simples somas. Criou os <strong>"Ossos de Napier"</strong> — hastes de marfim gravadas com tabelas numéricas.',t2:'Napier também introduziu o ponto decimal na forma que conhecemos hoje. Sua contribuição foi fundamental para todos os instrumentos de cálculo que vieram depois.'},
+/* 6 */ {year:'1614',title:'Os Ossos de Napier — Multiplicação Visual',napier:true,txt:'Cada haste contém os múltiplos de um dígito, divididos por uma diagonal. <strong>Clique nos dígitos do topo</strong> para trocar o número e no <strong>multiplicador à esquerda</strong> para ver a soma pelas diagonais.'},
+/* 7 */ {year:'1642',title:'Blaise Pascal e a Primeira Calculadora Mecânica',img:TH+'7/78/Pascaline-CnAM_823-1-IMG_1506-black.jpg/1280px-Pascaline-CnAM_823-1-IMG_1506-black.jpg',txt:'Em 1642, com apenas <strong>18 anos</strong>, Blaise Pascal construiu a <strong>Pascalina</strong> — a primeira calculadora mecânica funcional. Composta por engrenagens e rodas dentadas, realizava adições e subtrações automaticamente.',t2:'Pascal a criou para ajudar seu pai, fiscal de impostos. Embora cara e difícil de manter, demonstrou pela primeira vez que uma máquina poderia substituir o trabalho mental humano. Foram produzidas cerca de 50 unidades.'},
+/* 8 */ {year:'1642',title:'A Pascalina — Calculadora de Engrenagens',pascaline:true,txt:'Cada roda representa um dígito. Ao passar de <strong>9 → 0</strong>, a engrenagem empurra a roda à esquerda em +1 — o <strong>"vai um"</strong> mecânico. Gire as rodas com <strong>+</strong> e <strong>−</strong> para acumular valores, exatamente como na máquina original.'},
+/* 9 */ {year:'1673',title:'Leibniz e a Roda Escalonada',img:TH+'5/52/Leibniz-Rechenmaschine_hg.jpg/1280px-Leibniz-Rechenmaschine_hg.jpg',txt:'O matemático alemão <strong>Gottfried Wilhelm Leibniz</strong> aperfeiçoou a calculadora de Pascal em 1673, criando a <strong>Stepped Reckoner</strong>. A roda escalonada permitia as quatro operações aritméticas básicas.',t2:'Leibniz também foi defensor precoce do <strong>sistema binário (base 2)</strong>, que seria a base de toda a computação digital moderna. Suas ideias sobre lógica formal anteciparam em séculos os fundamentos da programação.'},
+/* 7 */ {year:'1822–1834',title:'Charles Babbage — O Pai do Computador',img:TH+'8/8b/Babbage_Difference_Engine.jpg/1280px-Babbage_Difference_Engine.jpg',txt:'<strong>Charles Babbage</strong> iniciou em 1822 o projeto da <strong>Máquina Diferencial</strong> — dispositivo mecânico a vapor para calcular tabelas matemáticas. Em 1834, concebeu a <strong>Máquina Analítica</strong>.',t2:'A Máquina Analítica possuía todos os componentes de um computador moderno: entrada (cartões perfurados), memória ("armazém"), processamento ("moinho") e saída impressa. Babbage estava um século à frente de seu tempo.'},
+/* 8 */ {year:'1843',title:'Ada Lovelace — A Primeira Programadora da História',img:TH+'a/a4/Ada_Lovelace_portrait.jpg/800px-Ada_Lovelace_portrait.jpg',sq:true,txt:'Augusta Ada King, Condessa de Lovelace, foi filha do poeta Lord Byron e uma brilhante matemática. Em 1843, ao traduzir um artigo sobre a Máquina Analítica de Babbage, Ada adicionou anotações <strong>três vezes mais longas</strong> que o texto original.',t2:'Nessas notas, escreveu o que é considerado o <strong>primeiro algoritmo</strong> destinado a ser processado por uma máquina. Ada compreendeu que a Máquina Analítica ia além do cálculo — era uma máquina de propósito geral. A linguagem Ada (1980) foi nomeada em sua homenagem.'},
+/* 9 */ {year:'1889',title:'Hollerith e o Embrião da IBM',img:WK+'e/ea/Hollerith_Punched_Card.jpg',txt:'O engenheiro americano <strong>Herman Hollerith</strong> criou o Sistema de Tabulação Elétrica para o Censo dos EUA de 1890. Usando cartões perfurados, reduziu o tempo de processamento de <strong>8 anos para menos de 2</strong>.',t2:'Hollerith fundou em 1896 a Tabulating Machine Company, que em 1924 seria renomeada por Thomas J. Watson como <strong>IBM (International Business Machines)</strong>. Os cartões perfurados dominaram a entrada de dados por décadas.'},
+/* 10 */ {year:'1890',title:'A Máquina Tabuladora — Censo Automático',hollerith:true,txt:'Cada pessoa do censo virava um <strong>cartão perfurado</strong>. A máquina passava <strong>agulhas</strong> sobre o cartão — onde havia furo, a agulha passava e fechava um <strong>circuito elétrico</strong>, incrementando o contador daquela categoria.'},
+/* 11 */ {year:'1854',title:'George Boole — A Lógica que Move os Computadores',img:WK+'c/ce/George_Boole_color.jpg',sq:true,bool:true,txt:'Em 1854, <strong>George Boole</strong> publicou <em>"An Investigation of the Laws of Thought"</em>, descrevendo um sistema de lógica onde todas as operações se reduzem a valores binários: <strong>verdadeiro (1) ou falso (0)</strong>.',t2:'Essa <strong>Álgebra Booleana</strong> tornou-se a base matemática de todos os circuitos digitais. Claude Shannon demonstrou que ela poderia ser implementada em circuitos elétricos, fundando a eletrônica digital. Toda operação computacional é uma operação booleana.'},
+/* 12 */ {year:'1854',title:'Álgebra Booleana — Circuito de Segurança',boole_circuit:true,txt:'A porta abre se (<strong>PIN e Digital</strong>) ou <strong>Chave Mestre</strong>, mas <strong>não em Lockdown</strong>. Este circuito com 4 portas lógicas é exatamente como processadores tomam decisões — bilhões de vezes por segundo.'},
+/* 13 */ {year:'1936',title:'Alan Turing — O Pai da Ciência da Computação',img:WK+'a/a1/Alan_Turing_Aged_16.jpg',sq:true,txt:'Em 1936, <strong>Alan Turing</strong> publicou <em>"On Computable Numbers"</em>, introduzindo a <strong>Máquina de Turing</strong> — modelo matemático capaz de simular qualquer algoritmo. Este trabalho estabeleceu os fundamentos teóricos da computação.',t2:'Durante a Segunda Guerra Mundial, liderou a equipe de Bletchley Park que decifrou o código alemão <strong>Enigma</strong>. Em 1950, propôs o <strong>Teste de Turing</strong> para avaliar inteligência de máquinas. O Prêmio Turing, o "Nobel da Computação", foi criado em sua homenagem.'},
+/* 12 */ {year:'1943',title:'Decriptando a Enigma — A Computação na Guerra',img:TH+'3/3e/EnigmaMachineLabeled.jpg/1024px-EnigmaMachineLabeled.jpg',txt:'A máquina <strong>Enigma</strong> era usada pela Alemanha Nazista para cifrar comunicações militares. Em <strong>Bletchley Park</strong>, Turing e Tommy Flowers desenvolveram o <strong>Colossus</strong> (1943) — considerado o primeiro computador eletrônico programável.',t2:'O Colossus usava <strong>1.500 válvulas termiônicas</strong> e processava 5.000 caracteres por segundo para quebrar os códigos. A quebra da Enigma foi decisiva para o término da Segunda Guerra e permaneceu secreta por décadas.'},
+/* 13 */ {year:'1940–1955',title:'1ª Geração — As Válvulas Termiônicas',img:TH+'e/e9/Elektronenroehren-auswahl.jpg/1280px-Elektronenroehren-auswahl.jpg',txt:'A primeira geração de computadores é caracterizada pelo uso de <strong>válvulas termiônicas</strong> (tubos de vácuo). Esses computadores eram imensos, consumiam enormes quantidades de energia e atraíam insetos (origem do termo <strong>"bug"</strong>).',bl:['Tamanho · salas inteiras (centenas de m²)','Velocidade · milhares de operações/segundo','Memória · tambores magnéticos e cartões perfurados','Programação · linguagem de máquina (binário puro)']},
+/* 14 */ {year:'1946',title:'ENIAC — O Gigante Eletrônico',img:TH+'6/6c/ENIAC_Penn1.jpg/1280px-ENIAC_Penn1.jpg',txt:'O <strong>ENIAC</strong> (Electronic Numerical Integrator and Computer), apresentado em 14 de fevereiro de 1946 na Universidade da Pensilvânia, tinha <strong>18.000 tubos de vácuo</strong>, pesava 30 toneladas, ocupava 167 m² e consumia 150 kW.',t2:'Seis mulheres programadoras — as <strong>"ENIAC Girls"</strong> — foram responsáveis por programá-lo: Betty Jennings, Frances Bilas, Betty Holberton, Marlyn Wescoff, Ruth Lichterman e Kay McNulty. Elas nunca receberam o reconhecimento merecido na época.'},
+/* 15 */ {year:'1945',title:'Von Neumann — A Arquitetura que Persiste até Hoje',img:TH+'e/e5/Von_Neumann_Architecture.svg/1280px-Von_Neumann_Architecture.svg.png',txt:'Em 1945, <strong>John von Neumann</strong> publicou o conceito fundamental que define os computadores até hoje: o <strong>programa armazenado na memória</strong>. Antes, os computadores eram reprogramados fisicamente por cabos.',bl:['Unidade de Controle · coordena todas as operações','ULA · realiza operações aritméticas e lógicas','Memória · armazena dados E instruções juntos','Entrada/Saída · comunicação com o mundo externo']},
+/* 16 */ {year:'1951',title:'UNIVAC I — O Primeiro Computador Comercial',img:TH+'9/9a/Univac_I_at_Census_Bureau_with_two_operators.jpg/1280px-Univac_I_at_Census_Bureau_with_two_operators.jpg',txt:'Em março de 1951, o <strong>UNIVAC I</strong> foi entregue ao Bureau do Censo dos EUA — o primeiro computador comercial americano. Desenvolvido por Eckert e Mauchly, os mesmos criadores do ENIAC.',t2:'Ficou famoso em 1952 quando <strong>previu corretamente a eleição presidencial</strong> de Eisenhower com apenas 5% dos votos apurados — transmitido ao vivo pela CBS. Foram vendidas 46 unidades entre 1951 e 1958.'},
+/* 17 */ {year:'1952',title:'Grace Hopper — A Almirante que Criou o Compilador',img:WK+'a/ad/Commodore_Grace_M._Hopper%2C_USN_%28covered%29.jpg',sq:true,qt:'"It\'s easier to ask forgiveness than it is to get permission." — Grace Hopper',txt:'A Contra-Almirante <strong>Grace Murray Hopper</strong> encontrou o primeiro "bug" real em 1945 — uma mariposa que havia travado um relé do Harvard Mark II. Em 1952, desenvolveu o <strong>A-0</strong>, o primeiro <strong>compilador</strong>.',t2:'O compilador traduzia código próximo da linguagem humana para linguagem de máquina. Essa ideia revolucionária abriu caminho para linguagens de alto nível. Hopper também liderou o desenvolvimento do <strong>COBOL</strong> (1959), usado em trilhões de transações hoje.'},
+/* 18 */ {year:'1955–1964',title:'2ª Geração — Os Transistores',img:TH+'2/21/Transistorer_%28cropped%29.jpg/1280px-Transistorer_%28cropped%29.jpg',txt:'Em 23 de dezembro de 1947, <strong>Bardeen, Brattain e Shockley</strong>, dos Bell Labs, inventaram o <strong>transistor</strong> — premiado com o Nobel de Física em 1956. Menor, mais confiável, com menos calor e consumo.',bl:['Tamanho · armários (não mais salas inteiras)','Velocidade · dezenas de milhares de ops/segundo','Memória · núcleos de ferrite magnética','Linguagens · FORTRAN, COBOL, LISP']},
+/* 19 */ {year:'1947',title:'O Transistor — A Invenção que Mudou Tudo',img:WK+'b/bf/Replica-of-first-transistor.jpg',sq:true,ctr:true,txt:'O <strong>transistor</strong> funciona como uma chave eletrônica que pode ser ligada ou desligada bilhões de vezes por segundo. Feito de materiais <strong>semicondutores</strong> como germânio e silício, substituiu as frágeis válvulas termiônicas.',t2:'A transição reduziu o tamanho dos computadores por um fator de 200 e o consumo de energia por 10.000. A <strong>Lei de Moore</strong> (1965) observou que o número de transistores dobra a cada ~dois anos — profecia autorrealizada por 50 anos.'},
+/* 20 */ {year:'1957–1959',title:'As Primeiras Linguagens de Programação',img:WK+'3/37/Grace_Hopper_and_UNIVAC.jpg',tw:'fortran',txt:'Em 1957, <strong>John Backus</strong> e sua equipe na IBM entregaram o <strong>FORTRAN</strong> (Formula Translator). Em 1959, o <strong>COBOL</strong>, liderado por Grace Hopper, foi criado para aplicações de negócios.',t2:'O COBOL ainda roda em mais de 95% dos sistemas de cartão de crédito e processa transações no valor de <strong>trilhões de dólares</strong> diariamente.'},
+/* 21 */ {year:'1964–1971',title:'3ª Geração — Circuitos Integrados',img:TH+'5/5c/Microchips.jpg/1280px-Microchips.jpg',txt:'Em 1958, <strong>Jack Kilby</strong> (Texas Instruments) e <strong>Robert Noyce</strong> (Fairchild Semiconductor) inventaram independentemente o <strong>circuito integrado</strong> — chip de silício com múltiplos transistores em uma única peça.',bl:['Tamanho · armários menores e minicomputadores','Velocidade · milhões de operações por segundo','SO · surgimento dos sistemas operacionais','Compatibilidade · IBM System/360 (1964)']},
+/* 22 */ {year:'1958',title:'Jack Kilby — O Nobel que Colocou o Mundo em um Chip',img:WK+'9/91/Jack_Kilby_%28cropped%29.png',sq:true,txt:'Em julho de 1958, durante as <strong>férias</strong> (enquanto colegas estavam fora), <strong>Jack Kilby</strong>, da Texas Instruments, teve a ideia: e se todos os componentes de um circuito fossem fabricados no mesmo pedaço de semicondutor?',t2:'Em setembro demonstrou o primeiro <strong>circuito integrado funcional</strong>. Robert Noyce chegou à mesma ideia de forma independente. Kilby recebeu o <strong>Nobel de Física em 2000</strong>. Hoje, um chip pode conter mais de <strong>100 bilhões de transistores</strong>.'},
+/* 23 */ {year:'1964',title:'IBM System/360 — A Revolução da Compatibilidade',img:WK+'5/54/Waterloo-IBM-System-360model75.jpg',txt:'Em 1964, a IBM anunciou o <strong>System/360</strong> — a primeira família com <strong>arquitetura compatível</strong>: programas escritos para um modelo simples rodavam nos mais potentes sem modificação. Este conceito ainda existe nos processadores x86.',t2:'O projeto custou o equivalente a <strong>US$ 5 bilhões</strong> da época — mais que o Projeto Manhattan — liderado por Gene Amdahl. O S/360 também popularizou os discos rígidos magnéticos e dominou o mercado corporativo por décadas.'},
+/* 24 */ {year:'1968',title:'Doug Engelbart — A Mãe de Todas as Demos',img:TH+'2/2b/Douglas_Engelbart%27s_prototype_mouse_-_Computer_History_Museum.jpg/1280px-Douglas_Engelbart%27s_prototype_mouse_-_Computer_History_Museum.jpg',txt:'Em 9 de dezembro de 1968, <strong>Douglas Engelbart</strong> apresentou em São Francisco a <em>"Mother of All Demos"</em>. Em 90 minutos, mostrou ao vivo: o <strong>mouse</strong>, videoconferência, hipertexto, processador de texto colaborativo e janelas de interface gráfica.',t2:'Engelbart acreditava que os computadores deveriam amplificar a inteligência humana. Seu trabalho influenciou diretamente o Xerox PARC, o Macintosh e toda a computação pessoal moderna.'},
+/* 25 */ {year:'1971–presente',title:'4ª Geração — O Computador em Um Único Chip',img:TH+'5/55/Intel_C4004.jpg/1280px-Intel_C4004.jpg',txt:'A quarta geração teve início com o <strong>microprocessador</strong> — circuito integrado que concentrava toda a CPU em um único chip. Isso tornou possível criar computadores pequenos e baratos o suficiente para uso pessoal.',bl:['Tamanho · bancada e depois bolso (smartphone)','Velocidade · bilhões de operações por segundo','LSI/VLSI · bilhões de transistores por chip','Ecossistema · software de prateleira e App Stores']},
+/* 26 */ {year:'1971',title:'Intel 4004 — O Primeiro Microprocessador',img:TH+'5/55/Intel_C4004.jpg/1280px-Intel_C4004.jpg',txt:'Em novembro de 1971, a <strong>Intel</strong> lançou o <strong>4004</strong> — desenvolvido por Ted Hoff, Federico Faggin e Stanley Mazor. Era um processador de <strong>4 bits</strong> com <strong>2.300 transistores</strong> em tecnologia de 10 micrômetros, rodando a 740 kHz.',t2:'Custava US$ 60 e continha a mesma capacidade computacional do <strong>ENIAC de 1946</strong> — que pesava 30 toneladas — em um pacote do tamanho de uma goma de borracha. A Intel negociou os direitos de comercialização com a empresa japonesa Busicom.'},
+/* 27 */ {year:'1975',title:'Altair 8800 — O Nascimento do PC',img:TH+'0/01/Altair_8800_Computer.jpg/1280px-Altair_8800_Computer.jpg',txt:'Em janeiro de 1975, a revista <em>Popular Electronics</em> trouxe na capa o <strong>Altair 8800</strong> — kit de computador baseado no Intel 8080, vendido por US$ 397. Foi o primeiro PC comercialmente bem-sucedido.',t2:'A notícia foi o estopim: <strong>Bill Gates e Paul Allen</strong> contataram a MITS para oferecer um interpretador BASIC, fundando em seguida a <strong>Microsoft</strong>. Em paralelo, Steve Wozniak viu o Altair e decidiu construir algo melhor: o Apple I.'},
+/* 28 */ {year:'1976–1977',title:'Apple — A Computação Nasce na Garagem',img:TH+'9/98/Apple_II_typical_configuration_1977.png/1280px-Apple_II_typical_configuration_1977.png',txt:'Em 1976, <strong>Steve Wozniak</strong> construiu o <strong>Apple I</strong>. <strong>Steve Jobs</strong> viu o potencial comercial e fundaram a Apple Computer em 1º de abril de 1976, vendendo por US$ 666,66.',t2:'Em 1977, o <strong>Apple II</strong>: colorido, expansível, com suporte a disquete. O <strong>VisiCalc</strong> (1979), a primeira planilha eletrônica, rodou primeiro no Apple II — foi o "killer app" que justificou a compra da máquina para milhares de empresas.'},
+/* 29 */ {year:'1975',title:'Microsoft — O Império do Software',img:TH+'9/96/Microsoft_logo_%282012%29.svg/1280px-Microsoft_logo_%282012%29.svg.png',txt:'<strong>Bill Gates</strong> e <strong>Paul Allen</strong> fundaram a <strong>Microsoft</strong> em 1975 para criar software para o Altair 8800. Em 1980, a IBM os procurou para criar um sistema operacional para seu novo PC.',t2:'A Microsoft comprou por US$ 50.000 o <strong>QDOS</strong>, renomeou para <strong>MS-DOS</strong> e licenciou à IBM — mantendo os direitos de licenciamento a terceiros. Quando os clones IBM surgiram, todos precisavam do MS-DOS. Essa decisão transformou a Microsoft em uma das empresas mais valiosas do mundo.'},
+/* 30 */ {year:'1981',title:'IBM PC — O Padrão que Definiu uma Era',img:TH+'6/69/IBM_PC_5150.jpg/1280px-IBM_PC_5150.jpg',txt:'Em agosto de 1981, a <strong>IBM</strong> lançou o <strong>IBM PC (modelo 5150)</strong> com Intel 8088, 16 KB de RAM e MS-DOS, a partir de US$ 1.565. A IBM usou componentes de mercado aberto e publicou as especificações — criando um <strong>padrão aberto</strong>.',t2:'Em menos de dois anos, surgiram dezenas de <strong>clones compatíveis</strong> (como a Compaq). O IBM PC foi eleito "Máquina do Ano de 1982" pela <em>Time</em>. Sua arquitetura <strong>x86</strong> é a base dos computadores e servidores até hoje.'},
+/* 31 */ {year:'1973',title:'Xerox PARC — Onde o Futuro Foi Inventado',img:TH+'8/8b/Xerox_Alto.jpg/1024px-Xerox_Alto.jpg',txt:'O <strong>Xerox PARC</strong> foi o laboratório mais prolífico da história da tecnologia. Nos anos 1970, criaram: o <strong>Alto</strong> (primeiro computador com GUI), o mouse, a Ethernet, o processador WYSIWYG e a impressora a laser.',t2:'A Xerox não soube comercializar nenhuma dessas invenções. Em 1979, <strong>Steve Jobs</strong> visitou o PARC e ficou impressionado com a interface gráfica — dois anos depois lançaria o Macintosh. É um dos maiores exemplos de inovação não capitalizada.'},
+/* 32 */ {year:'1984',title:'Macintosh — "Hello" ao Mundo',img:TH+'e/e3/Macintosh_128k_transparency.png/800px-Macintosh_128k_transparency.png',sq:true,txt:'Em 22 de janeiro de 1984, durante o Super Bowl, a Apple exibiu o mais famoso comercial da história, aludindo ao livro "1984" de Orwell e ao domínio da IBM. Dois dias depois, <strong>Steve Jobs</strong> apresentou o <strong>Macintosh</strong>.',t2:'Era o primeiro computador pessoal de sucesso comercial com <strong>interface gráfica (GUI)</strong>, mouse, ícones e janelas acessíveis ao público. Inaugurou a era do <strong>desktop publishing</strong>. O próprio Mac se apresentou com a frase <em>"Hello"</em> na tela.'},
+/* 33 */ {year:'1985–1995',title:'Windows — A Interface para Todos',img:'https://upload.wikimedia.org/wikipedia/en/e/eb/Windows_95_at_first_run.png',txt:'Em novembro de 1985, a Microsoft lançou o <strong>Windows 1.0</strong>. O <strong>Windows 3.0</strong> (1990) vendeu 10 milhões de cópias em dois anos. A batalha Apple vs. Microsoft resultou em processo judicial — a Corte decidiu que conceitos de interface não eram protegidos por direitos autorais.',t2:'O <strong>Windows 95</strong> (24 de agosto de 1995, com filas nas lojas e os Rolling Stones na trilha) estabeleceu o Windows como o sistema operacional dominante no mundo — posição mantida até hoje.'},
+/* 34 */ {year:'1969–1991',title:'Unix, GNU e Linux — A Filosofia do Software Livre',img:TH+'3/35/Tux.svg/800px-Tux.svg.png',sq:true,txt:'Em 1969, <strong>Dennis Ritchie</strong> e <strong>Ken Thompson</strong> nos Bell Labs criaram o <strong>Unix</strong>. Ritchie também criou a <strong>linguagem C</strong> (1972). Em 1983, <strong>Richard Stallman</strong> lançou o Projeto GNU (software livre).',t2:'Em 1991, <strong>Linus Torvalds</strong> criou o kernel <strong>Linux</strong>: <em>"Estou fazendo um SO, grátis, só por hobby."</em> O Linux hoje roda em 96% dos maiores supercomputadores e em todos os dispositivos Android.'},
+/* 35 */ {year:'1969',title:'ARPANET — Os Primeiros Nós da Internet',img:TH+'b/bf/Arpanet_logical_map%2C_march_1977.png/1280px-Arpanet_logical_map%2C_march_1977.png',txt:'Em 1969, o Departamento de Defesa dos EUA financiou a <strong>ARPANET</strong> — a primeira rede com comutação de pacotes. A primeira mensagem foi transmitida entre a UCLA e o SRI: a palavra "LOGIN" — mas travou após <strong>"LO"</strong>.',t2:'A ARPANET foi projetada para ser <strong>descentralizada</strong>: se parte fosse destruída, as mensagens encontrariam rotas alternativas. Este princípio de robustez é o DNA da internet que conhecemos.'},
+/* 36 */ {year:'1983',title:'TCP/IP — O Protocolo que Uniu o Mundo',img:TH+'c/c4/IP_stack_connections.svg/1280px-IP_stack_connections.svg.png',txt:'Em 1973, <strong>Vint Cerf</strong> e <strong>Bob Kahn</strong> começaram a trabalhar no protocolo que permitiria que redes diferentes se comunicassem. Em 1983, a transição para o <strong>TCP/IP</strong> marcou o <strong>nascimento oficial da Internet</strong>.',t2:'O TCP/IP divide dados em "pacotes", envia pelo caminho mais eficiente e os remonta no destino. Em 1990, a ARPANET foi descomissionada. A internet, agora civil e global, estava livre para crescer.'},
+/* 37 */ {year:'1989–1991',title:'Tim Berners-Lee — A Teia que Envolveu o Mundo',img:TH+'b/b2/WWW_logo_by_Robert_Cailliau.svg/1024px-WWW_logo_by_Robert_Cailliau.svg.png',txt:'Em março de 1989, o físico <strong>Tim Berners-Lee</strong>, no CERN, enviou a proposta que se tornaria a <strong>World Wide Web</strong>. Seu chefe respondeu: <em>"Vago, mas interessante."</em>',t2:'Em 1990, Berners-Lee escreveu o primeiro servidor web, o primeiro navegador e criou o <strong>HTML</strong> e as <strong>URLs</strong>. Em agosto de 1991, o primeiro site: <code style="font-family:JetBrains Mono,monospace;color:var(--cyan)">info.cern.ch</code>. Sua maior decisão: <strong>não patentear</strong> a web.'},
+/* 38 */ {year:'1993–1994',title:'Mosaic e Netscape — A Web Chega ao Público',img:WK+'e/ea/NCSA_Mosaic_Browser_Screenshot.png',txt:'Em 1993, estudantes da Universidade de Illinois criaram o <strong>NCSA Mosaic</strong> — primeiro navegador com GUI, capaz de exibir imagens junto ao texto. Em 1994, <strong>Marc Andreessen</strong> fundou a Netscape.',t2:'Em setembro de 1994, <strong>75% dos internautas</strong> já usavam o Netscape. O IPO da Netscape em agosto de 1995 inaugurou a era das empresas ".com". A web passou de 130 sites em 1993 para mais de 100.000 em 1996.'},
+/* 39 */ {year:'1998',title:'Google — Organizar a Informação do Mundo',img:TH+'2/2f/Google_2015_logo.svg/1280px-Google_2015_logo.svg.png',txt:'Em 1998, <strong>Larry Page</strong> e <strong>Sergey Brin</strong>, de Stanford, fundaram o <strong>Google</strong> em uma garagem. Seu diferencial: o algoritmo <strong>PageRank</strong>, que classificava páginas pela quantidade e qualidade dos links que apontavam para elas.',t2:'O Google não foi o primeiro buscador — Yahoo, AltaVista e Lycos existiam antes. Mas era infinitamente mais preciso. Hoje processa mais de <strong>8,5 bilhões de buscas/dia</strong>. O verbo "googlar" entrou nos dicionários de vários idiomas.'},
+/* 40 */ {year:'2000–2004',title:'A Bolha das .com e o Renascimento — Web 2.0',img:TH+'8/84/Nasdaq_Composite_dot-com_bubble.svg/1280px-Nasdaq_Composite_dot-com_bubble.svg.png',txt:'Entre 1995 e 2000, o entusiasmo criou uma das maiores bolhas especulativas. Em março de 2000, a bolha estourou: o <strong>NASDAQ caiu 78%</strong> em 18 meses.',t2:'Das cinzas surgiu a <strong>Web 2.0</strong>. Wikipedia (2001), LinkedIn (2003), Facebook (2004) e YouTube (2005) transformaram a web de leitura passiva para <strong>participação ativa</strong>. O usuário passou a ser também criador de conteúdo.'},
+/* 41 */ {year:'1971–2009',title:'Da Carta ao Tweet — Revolução da Comunicação',img:TH+'5/51/Facebook_f_logo_%282019%29.svg/1024px-Facebook_f_logo_%282019%29.svg.png',sq:true,txt:'O primeiro e-mail foi enviado por <strong>Ray Tomlinson</strong> em 1971, que escolheu o símbolo <strong>@</strong> para separar usuário de domínio. Na década de 2000, as redes sociais reconfiguraram as relações humanas.',bl:['2004 · Orkut — primeira grande rede social no Brasil','2004 · Facebook — conectou bilhões de pessoas','2006 · Twitter — comunicação em 140 caracteres','2009 · WhatsApp — substituiu o SMS globalmente']},
+/* 42 */ {year:'2001–2007',title:'iPhone — O Computador que Cabe no Bolso',img:TH+'a/ad/IPhone_1st_Gen.svg/800px-IPhone_1st_Gen.svg.png',sq:true,txt:'Em 2001, <strong>Steve Jobs</strong> apresentou o iPod: <em>"1.000 músicas no seu bolso."</em> Em 9 de janeiro de 2007: <em>"A Apple vai reinventar o telefone."</em> O <strong>iPhone</strong> combinou telefone, iPod e navegador com tela touchscreen.',t2:'Ao abolir o teclado físico, o iPhone redefiniu o que é um computador. O <strong>App Store</strong> (2008) criou um ecossistema que transformou o smartphone em plataforma universal. Em 2023, havia mais de <strong>6,8 bilhões</strong> de smartphones ativos.'},
+/* 43 */ {year:'2008',title:'Android — O SO Mais Usado do Mundo',img:TH+'d/d7/Android_robot.svg/800px-Android_robot.svg.png',sq:true,txt:'Em 2005, o Google adquiriu a startup <strong>Android Inc.</strong> Em setembro de 2008, o primeiro smartphone Android foi lançado: o <strong>HTC Dream (T-Mobile G1)</strong>. Ao contrário do iOS, o Android era <strong>open source</strong>.',t2:'Samsung, LG, Motorola, Huawei — todos adotaram o Android. Em 2010 já superava o iPhone. Hoje detém <strong>72% do mercado mundial</strong>, com mais de 3 bilhões de dispositivos ativos — o SO mais usado da história da computação.'},
+/* 44 */ {year:'2006',title:'Cloud Computing — Computação Como Serviço',img:TH+'9/93/Amazon_Web_Services_Logo.svg/1280px-Amazon_Web_Services_Logo.svg.png',txt:'Em 2006, a <strong>Amazon</strong> lançou o <strong>AWS</strong> — inaugurando a era da computação em nuvem comercial. Em vez de cada empresa comprar servidores, podia alugar capacidade e pagar apenas pelo uso.',t2:'Google App Engine (2008) e Microsoft Azure (2010) seguiram. <strong>Netflix, Uber, Airbnb e WhatsApp</strong> cresceram sobre a nuvem. Os três maiores provedores (AWS, Azure, Google Cloud) movimentam mais de <strong>US$ 300 bilhões/ano</strong>.'},
+/* 45 */ {year:'2010',title:'Big Data — Os Dados como o Novo Petróleo',img:TH+'5/5d/BalticServers_data_center.jpg/1280px-BalticServers_data_center.jpg',txt:'Com bilhões de usuários conectados, surgiu o <strong>Big Data</strong>. As <strong>"3 Vs"</strong>: <strong>Volume</strong> (petabytes diários), <strong>Velocidade</strong> (tempo real) e <strong>Variedade</strong> (texto, imagem, vídeo, sensores).',t2:'Tecnologias como <strong>Hadoop</strong> e <strong>Apache Spark</strong> permitem processar dados distribuídos em clusters. A análise de Big Data alimenta desde recomendações do Netflix até diagnósticos médicos. Em 2023, o mundo gerou cerca de <strong>120 zettabytes</strong>.'},
+/* 46 */ {year:'1976–hoje',title:'Supercomputadores — Na Fronteira do Possível',img:TH+'1/19/Frontier_supercomputer_%286%29.jpg/1280px-Frontier_supercomputer_%286%29.jpg',sc:true,txt:'O <strong>Cray-1</strong> (1976) realizava 166 megaFLOPS. O <strong>Frontier</strong> (Oak Ridge, EUA, 2022) atingiu <strong>1,1 exaFLOPS</strong> — 1 quintilhão (10¹⁸) de operações de ponto flutuante por segundo.',t2:'Se cada pessoa da Terra fizesse um cálculo por segundo, levaria mais de <strong>4 anos</strong> para igualar o que o Frontier faz em 1 segundo. O Summit (IBM/NVIDIA, 2018) teve papel crucial em pesquisas sobre COVID-19.'},
+/* 47 */ {year:'1950–1980',title:'Inteligência Artificial — Sonho Antigo, Realidade Recente',img:TH+'8/81/Artificial_Intelligence_%26_AI_%26_Machine_Learning_-_30212411048.jpg/1280px-Artificial_Intelligence_%26_AI_%26_Machine_Learning_-_30212411048.jpg',txt:'Em 1950, <strong>Alan Turing</strong> propôs o <strong>Teste de Turing</strong>. Em 1956, <strong>John McCarthy</strong> cunhou o termo "Inteligência Artificial" na conferência de Dartmouth. Nos anos 1960-70, o <strong>ELIZA</strong> (1966) simulava um terapeuta.',t2:'Períodos de entusiasmo foram seguidos de <strong>"invernos da IA"</strong> — quando expectativas excediam resultados. Mas as fundações teóricas eram sólidas e esperavam apenas hardware suficiente para se tornarem realidade.'},
+/* 48 */ {year:'1986–2012',title:'Redes Neurais e o Aprendizado de Máquina',img:TH+'4/46/Colored_neural_network.svg/1280px-Colored_neural_network.svg.png',nr:true,txt:'O <strong>aprendizado de máquina</strong> propõe que computadores aprendam a partir de dados, sem serem explicitamente programados. As redes neurais ganharam tração com o algoritmo de <strong>backpropagation</strong> publicado por Geoffrey Hinton em 1986.',t2:'Em 2012, a rede neural <strong>AlexNet</strong> venceu o desafio ImageNet com margem de 10,8 pontos percentuais. Isso desencadeou a revolução do <strong>Deep Learning</strong> — transformando reconhecimento de imagem, fala e texto.'},
+/* 49 */ {year:'2016',title:'AlphaGo — Quando a IA Superou o Melhor Humano',img:WK+'8/80/Go_board_part.jpg',txt:'Em março de 2016, o <strong>AlphaGo</strong> (DeepMind/Google) derrotou o campeão mundial de Go, <strong>Lee Sedol</strong>, por 4 a 1. O jogo Go tem mais possibilidades que átomos no universo — considerado impossível para máquinas por décadas.',t2:'O AlphaGo usou <strong>aprendizado por reforço profundo</strong> — aprendeu jogando contra si mesmo. O <strong>AlphaGo Zero</strong> (2017) aprendeu do zero e superou o original por 100 a 0. O <strong>AlphaFold</strong> (2018) resolveu o dobramento de proteínas.'},
+/* 50 */ {year:'2017–2023',title:'ChatGPT e os LLMs — A IA que Fala como Humanos',img:TH+'0/04/ChatGPT_logo.svg/1024px-ChatGPT_logo.svg.png',sq:true,tw:'chat',txt:'Em 2017, o Google publicou <em>"Attention Is All You Need"</em>, apresentando a arquitetura <strong>Transformer</strong>. Em 2020, o <strong>GPT-3</strong> com 175 bilhões de parâmetros chocou o mundo. Em novembro de 2022, o <strong>ChatGPT</strong> alcançou 1 milhão de usuários em 5 dias.',t2:'Em 2023, GPT-4, Google Gemini e Meta LLaMA consolidaram IAs capazes de raciocinar, programar e criar com competência próxima à humana em muitas tarefas.'},
+/* 51 */ {year:'2022–2024',title:'DALL-E, Midjourney e Sora — IA que Cria',img:TH+'4/4d/OpenAI_Logo.svg/1280px-OpenAI_Logo.svg.png',txt:'Os <strong>modelos de IA generativa</strong> expandiram a IA para além do texto. <strong>DALL-E</strong> (2021), <strong>Midjourney</strong> e <strong>Stable Diffusion</strong> (2022) democratizaram a criação de imagens a partir de texto.',t2:'Em 2023, o <strong>GitHub Copilot</strong> passou a escrever código ao lado de programadores. Em 2024, o <strong>Sora</strong> demonstrou geração de vídeo realista a partir de texto. O <strong>AlphaFold 3</strong> e modelos médicos de IA estão acelerando descobertas científicas.'},
+/* 52 */ {year:'2019–hoje',title:'Computação Quântica — Além dos Bits',img:TH+'9/91/IBM_Quantum_System_One.jpg/1280px-IBM_Quantum_System_One.jpg',qt2:true,txt:'Computadores clássicos usam <strong>bits</strong> (0 ou 1). A computação quântica usa <strong>qubits</strong> — que graças à mecânica quântica existem em <strong>superposição</strong> (0, 1, ou ambos). Isso permite resolver certos problemas exponencialmente mais rápido.',t2:'Em 2019, o <strong>Google Sycamore</strong> realizou em 200 segundos um cálculo que levaria 10.000 anos num supercomputador clássico — <strong>"supremacia quântica"</strong>. Em 2023, a IBM lançou o processador <strong>Condor</strong> com 1.121 qubits.'},
+/* 53 */ {year:'1999–hoje',title:'Internet das Coisas — Quando Tudo se Conecta',img:TH+'a/ab/Internet_of_Things.jpg/1280px-Internet_of_Things.jpg',txt:'O termo <strong>IoT</strong> foi popularizado por <strong>Kevin Ashton</strong> em 1999. Hoje, mais de <strong>16 bilhões de dispositivos</strong> conectados — de termostatos e geladeiras a carros autônomos e sensores agrícolas.',t2:'A <strong>computação ubíqua</strong> — prevista por Mark Weiser do Xerox PARC em 1988 — está se tornando realidade. O desafio crescente: <strong>segurança</strong> (cada dispositivo é um potencial vetor de ataque) e <strong>privacidade</strong>.'},
+/* 54 */ {year:'1965–hoje',title:'A Lei de Moore — e o Fim de uma Era',img:TH+'0/00/Moore%27s_Law_Transistor_Count_1970-2020.png/1280px-Moore%27s_Law_Transistor_Count_1970-2020.png',mr:true,txt:'Em 1965, <strong>Gordon Moore</strong> (cofundador da Intel) observou que o número de transistores em um chip <strong>dobrava a cada dois anos</strong>, com o custo caindo pela metade. Esta profecia autorrealizada guiou a indústria por 50 anos.',t2:'A física impõe limites: transistores modernos têm apenas <strong>2 a 3 nanômetros</strong>. A indústria busca alternativas: chips 3D, RISC-V, GPUs, TPUs, NPUs e chiplets. O progresso continua, mas por caminhos diferentes.'},
+/* 55 */ {year:'1972–hoje',title:'Cultura Digital — Quando o Software Virou Arte',img:TH+'2/26/Pong.svg/1024px-Pong.svg.png',pg:true,txt:'O <strong>Pong</strong> (1972) inaugurou a indústria de jogos digitais — hoje mais de <strong>US$ 220 bilhões/ano</strong>, mais que cinema e música juntos. O <strong>Toy Story</strong> (1995) foi o primeiro longa totalmente gerado por computador.',t2:'A música digital passou pelo MIDI (1983), MP3 (1994), Napster (1999) e Spotify (2008). O cinema digital eliminou a película. A computação tornou-se o substrato sobre o qual a <strong>cultura contemporânea</strong> se desenvolve.'},
+/* 56 */ {year:'1970–hoje',title:'O Brasil e a Computação — Uma História Própria',img:TH+'0/05/Flag_of_Brazil.svg/1280px-Flag_of_Brazil.svg.png',txt:'O Brasil tem trajetória peculiar. Na década de 1970-80, a <strong>Política de Informática</strong> com reserva de mercado protegia a indústria nacional — empresas como <strong>Cobra Computadores</strong> e <strong>Itautec</strong> surgiram neste contexto.',t2:'O <strong>Pix</strong>, lançado em novembro de 2020, atingiu <strong>100 milhões de usuários em menos de um ano</strong> — considerado o sistema de pagamento instantâneo mais bem-sucedido do mundo. Somos também líderes em <strong>agtech</strong>.'},
+/* 57 */ {year:'1977–hoje',title:'Segurança Digital — O Escudo Invisível',img:TH+'6/65/Crypto_key.svg/1024px-Crypto_key.svg.png',sq:true,txt:'A <strong>criptografia RSA</strong> (1977), proposta por Rivest, Shamir e Adleman, garante a segurança das comunicações online. O <strong>HTTPS</strong> usa protocolos SSL/TLS baseados nessas ideias para proteger sites de banco e e-commerce.',t2:'O primeiro grande worm, o <strong>Morris Worm</strong> (1988), infectou 6.000 computadores. Hoje, ciberataques custam trilhões por ano. A área de <strong>DevSecOps</strong> — integrar segurança em cada etapa do desenvolvimento — é uma das mais demandadas.'},
+/* 58 */ {year:'Além de 2024',title:'O Futuro da Computação — Além do Silício',img:TH+'9/91/IBM_Quantum_System_One.jpg/1280px-IBM_Quantum_System_One.jpg',txt:'O futuro está sendo construído em múltiplas frentes: <strong>computação quântica</strong>, <strong>computação neuromórfica</strong> (Intel Loihi 2, IBM TrueNorth — chips que imitam o cérebro), <strong>processadores fotônicos</strong> (usando luz em vez de elétrons).',t2:'Interfaces cérebro-computador como o <strong>Neuralink</strong> levantam questões filosóficas sobre os limites entre humano e máquina. A <strong>computação de DNA</strong> demonstrou capacidade de armazenar dados com densidade espantosa.'},
+/* 59 */ {cov:true,cls:true,year:'3000 a.C. → ∞',title:'A Jornada Continua',sub:'Computação como Extensão da Mente Humana',txt:'De 3.000 a.C. ao presente, a humanidade construiu uma cadeia ininterrupta de inovações para ampliar sua capacidade cognitiva. O ábaco, a Pascalina, o ENIAC, o transistor, o microprocessador, a internet, o smartphone e a inteligência artificial são elos de uma mesma corrente.'},
+];
+
+/* RENDER */
+const deck=document.getElementById('deck');
+const prog=document.getElementById('prog');
+const secbar=document.getElementById('secbar');
+const sctrEl=document.getElementById('sctr');
+const dotsEl=document.getElementById('dots');
+const btnP=document.getElementById('btn-prev');
+const btnN=document.getElementById('btn-next');
+let cur=0;
+
+function wikiSrc(url){
+  if(!url) return url;
+  // Extract filename from any Wikimedia Commons URL (with or without /thumb/ and hash path)
+  const m=url.match(/\/commons\/(?:thumb\/)?[0-9a-f]\/[0-9a-f]{2}\/([^\/]+)/);
+  if(m) return 'https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/'+m[1]+'&width=900';
+  return url;
+}
+function img(url,sq,tall){
+  if(!url) return '';
+  const isLogo=/\.(svg|SVG)\b/.test(url)||/logo|Logo|flag|Flag|Android_robot|ChatGPT|OpenAI|Facebook_f|IPhone_1st|Tux\.svg|Crypto_key|WWW_logo|Netscape_icon|IP_stack|Pong\.svg/.test(url);
+  return `<div class="simg${sq?' sq':tall?' tall':''}${isLogo?' logo':''}" style="flex-shrink:0"><img src="${wikiSrc(url)}" alt="" onerror="this.style.display='none'"></div>`;
+}
+function blist(arr){
+  return `<div class="bullets">${arr.map(b=>{const p=b.split(' · ');return`<div class="bullet"><strong>${p[0]}</strong><span>${p.slice(1).join(' · ')}</span></div>`}).join('')}</div>`;
+}
+
+function render(d,i){
+  const s=sOf(i);
+  const n=String(i+1).padStart(2,'0');
+  const h=`<div class="shead"><span class="snum">${n} / ${D.length}</span><span class="stag">${s.name}</span>${d.year?`<span class="syear">${d.year}</span>`:''}</div>`;
+
+  if(d.cov&&d.cls){
+    const pts=Array.from({length:28},(_,k)=>{
+      return `<div class="pt" style="left:${(5+Math.random()*90).toFixed(0)}%;top:${(10+Math.random()*80).toFixed(0)}%;--tx:${(Math.random()*120-60).toFixed(0)}px;--ty:${(-30-Math.random()*90).toFixed(0)}px;--dl:${(Math.random()*5).toFixed(1)}s;--d:${(4+Math.random()*4).toFixed(1)}s"></div>`;
+    }).join('');
+    return `<section class="slide cover-slide ${s.cls}" data-i="${i}"><div class="particles">${pts}</div>${h}<h1 class="ttl">${d.title}</h1><p class="sub">${d.sub}</p><p style="font-size:13.5px;color:var(--dim);max-width:100%;text-align:center;line-height:1.8;margin-top:8px;position:relative;z-index:1">${d.txt}</p><p style="font-size:1rem;color:var(--acc);font-weight:600;max-width:100%;text-align:center;margin-top:18px;font-family:'Syne',sans-serif;position:relative;z-index:1">A computação é, em essência, a mais poderosa ferramenta que a humanidade já criou para entender e transformar o mundo.</p></section>`;
+  }
+  if(d.cov){
+    const badges=SECS.map((ss,k)=>`<span class="era-badge" style="--di:${k};color:${ss.color};border-color:${ss.color}">${ss.name}</span>`).join('');
+    return `<section class="slide cover-slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1><p class="sub">${d.sub}</p>${d.img?`<div class="cover-img"><img src="${wikiSrc(d.img)}" alt="" onerror="this.style.display='none'"></div>`:''}<p style="font-size:13px;color:var(--dim);max-width:100%;text-align:center;margin-top:16px">${d.txt}</p><div class="cover-badges">${badges}</div></section>`;
+  }
+  if(d.tl){
+    const half=Math.ceil(d.tl.length/2);
+    const mkTl=items=>items.map(([dt,tx])=>`<div class="tl-item"><span class="tl-date">${dt}</span><span class="tl-text">${tx}</span></div>`).join('');
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1><div class="tl-grid"><div class="timeline">${mkTl(d.tl.slice(0,half))}</div><div class="timeline">${mkTl(d.tl.slice(half))}</div></div></section>`;
+  }
+
+  if(d.boole_circuit){
+    const svg=`<svg viewBox="0 0 540 210" xmlns="http://www.w3.org/2000/svg">
+      <!-- Wires: inputs -->
+      <line id="bw-p" class="bw" x1="10" y1="35" x2="120" y2="35"/>
+      <line id="bw-f" class="bw" x1="10" y1="75" x2="120" y2="75"/>
+      <polyline id="bw-m" class="bw" points="10,130 220,130 250,110"/>
+      <line id="bw-l" class="bw" x1="10" y1="185" x2="120" y2="185"/>
+      <!-- Wire: AND out → OR in -->
+      <polyline id="bw-and-or" class="bw" points="185,55 220,55 250,90"/>
+      <!-- Wire: NOT out → AND2 in -->
+      <polyline id="bw-not-and2" class="bw" points="195,185 340,185 370,145"/>
+      <!-- Wire: OR out → AND2 in -->
+      <line id="bw-or-and2" class="bw" x1="315" y1="100" x2="370" y2="125"/>
+      <!-- Wire: output -->
+      <line id="bw-out" class="bw" x1="435" y1="135" x2="500" y2="135"/>
+      <!-- AND gate: P,F → -->
+      <path id="bg-and1" class="bgat" d="M120,20 L155,20 A35,35 0 0,1 155,90 L120,90 Z"/>
+      <text class="btg" x="145" y="59" text-anchor="middle">AND</text>
+      <!-- OR gate: AND1,M → -->
+      <path id="bg-or" class="bgat" d="M250,75 Q260,100 250,125 Q285,125 315,100 Q285,75 250,75 Z"/>
+      <text class="btg" x="280" y="104" text-anchor="middle">OR</text>
+      <!-- NOT gate: L → -->
+      <path id="bg-not" class="bgat" d="M120,165 L180,185 L120,205 Z"/>
+      <circle id="bg-not-b" class="bgat" cx="188" cy="185" r="6" fill="var(--bg)"/>
+      <text class="btg" x="148" y="190" text-anchor="middle">NOT</text>
+      <!-- AND2 gate: OR,NOT → OUT -->
+      <path id="bg-and2" class="bgat" d="M370,110 L405,110 A25,25 0 0,1 405,160 L370,160 Z"/>
+      <text class="btg" x="395" y="139" text-anchor="middle">AND</text>
+      <!-- Input labels -->
+      <text id="bl-p" class="bvl" x="5" y="40" text-anchor="end" style="font-size:18px">P</text>
+      <text id="bl-f" class="bvl" x="5" y="80" text-anchor="end" style="font-size:18px">F</text>
+      <text id="bl-m" class="bvl" x="5" y="135" text-anchor="end" style="font-size:18px">M</text>
+      <text id="bl-l" class="bvl" x="5" y="190" text-anchor="end" style="font-size:18px">L</text>
+      <!-- Intermediate values -->
+      <text id="bv-and1" class="bvl" x="200" y="48" text-anchor="middle">0</text>
+      <text id="bv-or" class="bvl" x="332" y="93" text-anchor="middle">0</text>
+      <text id="bv-not" class="bvl" x="212" y="178" text-anchor="middle">1</text>
+      <!-- Output icon + value -->
+      <text class="bout" id="bv-out-icon" x="510" y="128" text-anchor="middle" style="font-size:26px">🔒</text>
+      <text class="bout" id="bv-out" x="510" y="155" text-anchor="middle" style="font-size:20px">0</text>
+    </svg>`;
+    const inputs=[
+      {id:'p',label:'P',tag:'PIN correto'},
+      {id:'f',label:'F',tag:'Digital ok'},
+      {id:'m',label:'M',tag:'Chave mestre'},
+      {id:'l',label:'L',tag:'Lockdown'},
+    ];
+    const toggles=inputs.map(inp=>`<div class="boole-sw" data-id="${inp.id}"><span class="boole-sw-lbl" id="bsl-${inp.id}">${inp.label}</span><div class="boole-toggle"></div><span class="boole-sw-tag">${inp.tag}</span></div>`).join('');
+    const bcBody=`<div class="boole-wrap">
+      <div class="boole-inputs" id="boole-inputs">${toggles}</div>
+      <div class="boole-svg-wrap" id="boole-svg">${svg}</div>
+      <div class="boole-expr" id="boole-expr"></div>
+      <p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p>
+    </div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${bcBody}</section>`;
+  }
+
+  if(d.hollerith){
+    const cats=['Homem','Mulher','Casado','Solteiro','<30a','30-60','60+','Urban','Rural'];
+    const NC=cats.length;
+    const needlesH=cats.map((_,i)=>`<div class="holl-needle" data-i="${i}"></div>`).join('');
+    const holesH=cats.map((c,i)=>`<div class="holl-hole" data-i="${i}">${c.substring(0,3)}</div>`).join('');
+    const ctrsH=cats.map((c,i)=>`<div class="holl-ctr"><div class="holl-ctr-val" data-i="${i}">0</div><div class="holl-ctr-lbl">${c}</div></div>`).join('');
+    const hlBody=`<div class="holl-wrap"><div class="holl-machine"><div class="holl-needles" id="holl-needles">${needlesH}</div><div class="holl-card-zone" id="holl-zone"><div class="holl-card enter" id="holl-card">${holesH}</div></div><div class="holl-counters" id="holl-ctrs">${ctrsH}</div></div><div style="display:flex;align-items:center;gap:10px;margin-top:6px"><button class="holl-go" id="holl-go">PASSAR CARTÃO</button><span class="holl-pile" id="holl-pile">Cartões: 0</span><button class="holl-resetbtn" id="holl-reset">ZERAR</button></div><div class="holl-status" id="holl-status"></div><p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:4px;line-height:1.5">${d.txt}</p></div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${hlBody}</section>`;
+  }
+
+  if(d.napier){
+    const npBody=`<div class="napier-wrap"><div class="napier-grid" id="napier-grid"></div><div class="napier-result" id="napier-result"><span class="napier-eq" id="napier-eq">Clique nos dígitos do cabeçalho para alterar · Clique no multiplicador à esquerda</span></div><div class="napier-diags" id="napier-diags"></div><p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:4px;line-height:1.5">${d.txt}</p></div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${npBody}</section>`;
+  }
+
+  if(d.pascaline){
+    const N=6, labels=['100K','10K','1K','100','10','1'];
+    let wheelsHtml='';
+    for(let w=0;w<N;w++){
+      const digits=Array.from({length:11},(_,j)=>`<div class="pascal-dg">${j%10}</div>`).join('');
+      wheelsHtml+=`<div class="pascal-wheel"><div class="pascal-wlbl">${labels[w]}</div><div class="pascal-drum" data-w="${w}"><div class="pascal-drum-inner">${digits}</div></div><div class="pascal-btns"><button class="pascal-btn" data-w="${w}" data-d="-1">−</button><button class="pascal-btn" data-w="${w}" data-d="1">+</button></div></div>`;
+    }
+    const pcBody=`<div class="pascal-wrap"><div class="pascal-machine"><div class="pascal-wheels" id="pascal-wheels">${wheelsHtml}</div><div class="pascal-display" id="pascal-display">000000</div></div><div style="display:flex;align-items:center;gap:8px;margin-top:2px"><button class="pascal-resetbtn" id="pascal-reset">ZERAR ACUMULADOR</button></div><div class="pascal-hint">Gire as rodas com <strong>+</strong> e <strong>−</strong> — cada giro soma ao total, como na Pascalina real</div><p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p></div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${pcBody}</section>`;
+  }
+
+  if(d.abacus){
+    const RODS=7,labels=['M','100K','10K','1K','100','10','1'];
+    let rodHtml='';
+    for(let r=0;r<RODS;r++){
+      const beads=`<div class="ab" data-r="${r}" data-t="u"></div>`+
+        Array.from({length:4},(_,b)=>`<div class="ab" data-r="${r}" data-t="l" data-b="${b}"></div>`).join('');
+      rodHtml+=`<div class="abacus-rod">${beads}</div>`;
+    }
+    const labelsHtml=`<div class="abacus-labels">${labels.map(l=>`<span>${l}</span>`).join('')}</div>`;
+    const abBody=`<div class="abacus-wrap"><div class="abacus-lbl">Ábaco Interativo</div><div class="abacus-board" id="abacus-board">${rodHtml}</div>${labelsHtml}<div class="abacus-val" id="abacus-val">0</div><div class="abacus-hint">Clique nas <strong>contas</strong> para mover · Acima da barra = <strong>5</strong> · Abaixo = <strong>1</strong></div><p style="font-size:13px;color:var(--dim);max-width:100%;text-align:center;margin-top:6px;line-height:1.6">${d.txt}</p></div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${abBody}</section>`;
+  }
+
+  let body='';
+  const imgH=img(d.img,d.sq,d.tall);
+  const txts=`<p>${d.txt}</p>${d.t2?`<p>${d.t2}</p>`:''}`;
+
+  if(d.bool){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="bool-ops"><div class="bool-op b-and">AND<small>1 AND 1 = 1</small></div><div class="bool-op b-or">OR<small>0 OR 1 = 1</small></div><div class="bool-op b-not">NOT<small>NOT 1 = 0</small></div><div class="bool-op b-xor">XOR<small>1 XOR 1 = 0</small></div></div></div></div>`;
+  } else if(d.bl){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}${blist(d.bl)}</div></div>`;
+  } else if(d.ctr){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="ctr-block"><div class="ctr-lbl">Transistores por chip</div><div class="ctr-val" id="ctr-${i}">2.300</div><div class="ctr-sub" id="ctr-sub-${i}">Intel 4004 · 1971</div></div></div></div>`;
+  } else if(d.sc){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="ctr-block"><div class="ctr-lbl">Performance</div><div class="ctr-val" id="ctr-${i}">166 MegaFLOPS</div><div class="ctr-sub" id="ctr-sub-${i}">Cray-1 · 1976</div></div></div></div>`;
+  } else if(d.tw){
+    const lines=d.tw==='fortran'
+      ? [{c:'tw-dim',t:'C  FORTRAN II — 1957'},{c:'tw-green',t:'     PROGRAM SOMA'},{c:'tw-green',t:'     A = 3.14'},{c:'tw-green',t:'     B = 2.72'},{c:'',t:'     C = A * B'}]
+      : [{c:'tw-cyan',t:'> O que é a Lei de Moore?'},{c:'tw-dim',t:''},{c:'tw-txt',t:'> A Lei de Moore observa que o número'},{c:'tw-txt',t:'  de transistores em um chip dobra a'},{c:'tw-txt',t:'  cada dois anos. Guiou a indústria'}];
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="typewr">${lines.map(l=>`<div class="tw-line ${l.c}">${l.t||'&nbsp;'}</div>`).join('')}</div></div></div>`;
+  } else if(d.pg){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="pong"><div class="pong-net"></div><div class="pong-p1"></div><div class="pong-p2"></div><div class="pong-ball"></div></div></div></div>`;
+  } else if(d.nr){
+    const layer=(n,lbl)=>`<div class="nlayer"><div class="nl-lbl">${lbl}</div>${Array.from({length:n},()=>'<div class="nnode"></div>').join('')}</div>`;
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="neural">${layer(4,'Entrada')}<span style="color:var(--mut);font-size:16px">→</span>${layer(5,'Oculta 1')}<span style="color:var(--mut);font-size:16px">→</span>${layer(3,'Oculta 2')}<span style="color:var(--mut);font-size:16px">→</span>${layer(2,'Saída')}</div></div></div>`;
+  } else if(d.qt2){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div style="display:flex;align-items:center;gap:18px"><div class="quant"></div><div style="font-size:12px;color:var(--dim);line-height:2"><span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--cyan);display:block;margin-bottom:4px">Superposição Quântica</span>Qubit: <span style="color:var(--cyan)">|0⟩</span> + <span style="color:var(--purple)">|1⟩</span><br>Entrelaçamento: correlação instantânea<br>Interferência: amplificar soluções certas</div></div></div></div>`;
+  } else if(d.mr){
+    body=`<div class="sbody wide">${imgH}<div class="stxt">${txts}<div class="moore-wrap"><div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--dim);margin-bottom:6px">Transistores por chip (escala logarítmica · 1971–2024)</div><svg width="100%" height="64" viewBox="0 0 300 64"><path d="M10,58 L45,52 L85,44 L125,35 L165,26 L205,17 L250,9 L295,3" fill="none" stroke="var(--orange)" stroke-width="2" class="mline"/><text x="10" y="62" fill="var(--mut)" font-size="7" font-family="JetBrains Mono">1971</text><text x="260" y="62" fill="var(--mut)" font-size="7" font-family="JetBrains Mono">2024</text></svg></div></div></div>`;
+  } else if(d.qt){
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}<div class="quote">${d.qt}</div></div></div>`;
+  } else {
+    body=`<div class="sbody">${imgH}<div class="stxt">${txts}</div></div>`;
+  }
+  return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${body}</section>`;
+}
+
+deck.innerHTML=D.map((d,i)=>render(d,i)).join('');
+const slides=[...deck.querySelectorAll('.slide')];
+
+/* ABACUS LOGIC — absolute positioning */
+(function(){
+  const board=document.getElementById('abacus-board');
+  if(!board)return;
+  const valEl=document.getElementById('abacus-val');
+  const RODS=7, mults=[1000000,100000,10000,1000,100,10,1];
+  const state=Array.from({length:RODS},()=>({upper:false,lower:0}));
+  const rodEls=board.querySelectorAll('.abacus-rod');
+
+  // Layout constants (px)
+  const BH=20, GAP=2, STEP=BH+GAP;  // bead height, gap, step
+  const BAR_Y=48;                      // bar top position
+  const UP_REST=4;                     // upper bead resting (top of rod)
+  const UP_ACTIVE=BAR_Y-BH-2;         // upper bead active (just above bar)
+  const LO_START=BAR_Y+6;             // lower zone starts just below bar
+  const ROD_H=154;
+
+  // Lower bead positions:
+  //   active (up, touching bar): top = LO_START + i*STEP
+  //   inactive (down, at bottom): top = ROD_H - (4-i)*STEP
+  function loUp(i){return LO_START+i*STEP}
+  function loDown(i){return ROD_H-(4-i)*STEP}
+
+  function renderRod(ri){
+    const rod=rodEls[ri]; if(!rod)return;
+    const s=state[ri];
+    const beads=rod.querySelectorAll('.ab');
+    // beads[0] = upper, beads[1..4] = lower 0..3
+    beads[0].style.top=(s.upper?UP_ACTIVE:UP_REST)+'px';
+    beads[0].classList.toggle('on',s.upper);
+    for(let i=0;i<4;i++){
+      const active=i<s.lower;
+      beads[i+1].style.top=(active?loUp(i):loDown(i))+'px';
+      beads[i+1].classList.toggle('on',active);
+    }
+  }
+
+  function calcTotal(){
+    let t=0;
+    state.forEach((s,i)=>{t+=(s.upper?5:0)*mults[i]+s.lower*mults[i]});
+    return t;
+  }
+
+  board.addEventListener('click',function(e){
+    const bead=e.target.closest('.ab');
+    if(!bead)return;
+    const ri=parseInt(bead.dataset.r);
+    if(bead.dataset.t==='u'){
+      state[ri].upper=!state[ri].upper;
+    } else {
+      const bi=parseInt(bead.dataset.b); // 0..3 (0=top near bar, 3=bottom)
+      const cur=state[ri].lower;
+      if(bi<cur){
+        // clicking an active bead -> pull it and beads below it back down
+        state[ri].lower=bi;
+      } else {
+        // clicking an inactive bead -> push it and all above up to bar
+        state[ri].lower=bi+1;
+      }
+    }
+    renderRod(ri);
+    valEl.textContent=calcTotal().toLocaleString('pt-BR');
+  });
+
+  for(let i=0;i<RODS;i++)renderRod(i);
+})();
+
+/* BOOLE CIRCUIT LOGIC — security system */
+(function(){
+  const inputsEl=document.getElementById('boole-inputs');
+  if(!inputsEl)return;
+  const state={p:0,f:0,m:0,l:0};
+  const ids=['p','f','m','l'];
+
+  function hi(id,on){const el=document.getElementById(id);if(el)el.classList.toggle('hi',on)}
+
+  function update(){
+    const {p,f,m,l}=state;
+    // Toggle visuals
+    ids.forEach(id=>{
+      const sw=inputsEl.querySelector(`[data-id="${id}"]`);
+      sw.querySelector('.boole-toggle').classList.toggle('on',!!state[id]);
+      document.getElementById('bsl-'+id).classList.toggle('on',!!state[id]);
+    });
+
+    // Compute
+    const and1=p&f;
+    const or1=and1|m;
+    const not1=l?0:1;
+    const out=or1&not1;
+
+    // Input wires
+    hi('bw-p',!!p); hi('bw-f',!!f); hi('bw-m',!!m); hi('bw-l',!!l);
+    hi('bl-p',!!p); hi('bl-f',!!f); hi('bl-m',!!m); hi('bl-l',!!l);
+
+    // Gate 1: AND
+    hi('bg-and1',!!and1); hi('bw-and-or',!!and1); hi('bv-and1',!!and1);
+    document.getElementById('bv-and1').textContent=and1;
+
+    // Gate 2: OR
+    hi('bg-or',!!or1); hi('bw-or-and2',!!or1); hi('bv-or',!!or1);
+    document.getElementById('bv-or').textContent=or1;
+
+    // Gate 3: NOT
+    hi('bg-not',!!not1); hi('bg-not-b',!!not1); hi('bw-not-and2',!!not1); hi('bv-not',!!not1);
+    document.getElementById('bv-not').textContent=not1;
+
+    // Gate 4: AND2 → output
+    hi('bg-and2',!!out); hi('bw-out',!!out); hi('bv-out',!!out);
+    document.getElementById('bv-out').textContent=out;
+    document.getElementById('bv-out-icon').textContent=out?'🔓':'🔒';
+    hi('bv-out-icon',!!out);
+
+    // Expression
+    const exprEl=document.getElementById('boole-expr');
+    const cls=v=>v?'bx-hi':'bx-lo';
+    exprEl.innerHTML=`PORTA = (P∧F) ∨ M) ∧ (¬L) = (<span class="${cls(and1)}">${and1}</span> ∨ ${m}) ∧ <span class="${cls(not1)}">${not1}</span> = <span class="${cls(or1)}">${or1}</span> ∧ <span class="${cls(not1)}">${not1}</span> = <span class="${cls(out)}">${out}</span> → <strong>${out?'🔓 ABERTA':'🔒 TRANCADA'}</strong>`;
+  }
+
+  inputsEl.addEventListener('click',function(e){
+    const sw=e.target.closest('.boole-sw');
+    if(!sw)return;
+    const id=sw.dataset.id;
+    state[id]=state[id]?0:1;
+    update();
+  });
+
+  update();
+})();
+
+/* HOLLERITH LOGIC */
+(function(){
+  const goBtn=document.getElementById('holl-go');
+  if(!goBtn)return;
+  const card=document.getElementById('holl-card');
+  const needles=document.getElementById('holl-needles');
+  const ctrsEl=document.getElementById('holl-ctrs');
+  const statusEl=document.getElementById('holl-status');
+  const pileEl=document.getElementById('holl-pile');
+  const resetBtn=document.getElementById('holl-reset');
+  const cats=['Homem','Mulher','Casado','Solteiro','<30a','30-60','60+','Urban','Rural'];
+  const NC=cats.length;
+  const counters=new Array(NC).fill(0);
+  let total=0,busy=false;
+
+  function genPerson(){
+    const p=new Array(NC).fill(false);
+    // sex: one of first two
+    const sex=Math.random()<.5?0:1; p[sex]=true;
+    // marital: one of next two
+    const mar=Math.random()<.55?2:3; p[mar]=true;
+    // age: one of next three
+    const r=Math.random(); p[r<.4?4:r<.8?5:6]=true;
+    // location
+    p[Math.random()<.65?7:8]=true;
+    return p;
+  }
+
+  function runCard(){
+    if(busy)return;
+    busy=true;
+    goBtn.disabled=true;
+    const person=genPerson();
+
+    // 1. Reset card and show entering
+    const holes=card.querySelectorAll('.holl-hole');
+    const ndls=needles.querySelectorAll('.holl-needle');
+    holes.forEach((h,i)=>{
+      h.classList.toggle('punched',person[i]);
+      h.classList.remove('spark');
+    });
+    ndls.forEach(n=>{n.classList.remove('fire','miss')});
+
+    card.className='holl-card enter';
+    statusEl.innerHTML='';
+
+    // 2. Card slides in
+    setTimeout(()=>{
+      card.className='holl-card reading';
+    },100);
+
+    // 3. Needles probe (slower — let them see the needles descend)
+    setTimeout(()=>{
+      ndls.forEach((n,i)=>{
+        n.classList.add(person[i]?'fire':'miss');
+      });
+    },800);
+
+    // 3b. Spark on punched holes (after needles reach)
+    setTimeout(()=>{
+      holes.forEach((h,i)=>{
+        if(person[i]) h.classList.add('spark');
+      });
+    },1300);
+
+    // 4. Increment counters
+    setTimeout(()=>{
+      const matched=[];
+      person.forEach((v,i)=>{
+        if(!v)return;
+        counters[i]++;
+        matched.push(cats[i]);
+        const el=ctrsEl.querySelector(`.holl-ctr-val[data-i="${i}"]`);
+        el.textContent=counters[i];
+        el.classList.add('bump');
+        setTimeout(()=>el.classList.remove('bump'),400);
+      });
+      total++;
+      pileEl.textContent='Cartões: '+total;
+      statusEl.innerHTML=`Cartão #${total}: <strong>${matched.join(' · ')}</strong>`;
+    },1800);
+
+    // 5. Card exits
+    setTimeout(()=>{
+      ndls.forEach(n=>{n.classList.remove('fire','miss')});
+      holes.forEach(h=>h.classList.remove('spark'));
+      card.className='holl-card exit';
+    },2600);
+
+    // 6. Ready for next
+    setTimeout(()=>{
+      busy=false;
+      goBtn.disabled=false;
+    },3100);
+  }
+
+  goBtn.addEventListener('click',runCard);
+
+  resetBtn.addEventListener('click',function(){
+    counters.fill(0);total=0;
+    ctrsEl.querySelectorAll('.holl-ctr-val').forEach(el=>{el.textContent='0'});
+    pileEl.textContent='Cartões: 0';
+    statusEl.innerHTML='';
+    card.className='holl-card enter';
+  });
+})();
+
+/* PASCALINE LOGIC */
+(function(){
+  const wheels=document.getElementById('pascal-wheels');
+  if(!wheels)return;
+  const dispEl=document.getElementById('pascal-display');
+  const resetBtn=document.getElementById('pascal-reset');
+  const N=6;
+  const state=[0,0,0,0,0,0];
+  const drums=wheels.querySelectorAll('.pascal-drum');
+  const DH=52;
+
+  function setWheel(w,val,animate){
+    state[w]=val;
+    const inner=drums[w].querySelector('.pascal-drum-inner');
+    inner.style.transition=animate?'transform .35s cubic-bezier(.4,0,.2,1)':'none';
+    inner.style.transform=`translateY(-${val*DH}px)`;
+  }
+
+  function updateDisplay(){
+    dispEl.textContent=state.join('');
+  }
+
+  function incrementWheel(w,delta,delay){
+    setTimeout(()=>{
+      drums[w].classList.remove('carry');
+      let next=state[w]+delta, carry=0;
+      if(next>9){carry=1;next=0}
+      else if(next<0){carry=-1;next=9}
+      setWheel(w,next,true);
+      if(carry!==0){
+        drums[w].classList.add('carry');
+        setTimeout(()=>drums[w].classList.remove('carry'),400);
+        if(w>0)incrementWheel(w-1,carry,200);
+      }
+      updateDisplay();
+    },delay);
+  }
+
+  wheels.addEventListener('click',function(e){
+    const btn=e.target.closest('.pascal-btn');
+    if(!btn)return;
+    incrementWheel(parseInt(btn.dataset.w),parseInt(btn.dataset.d),0);
+  });
+
+  resetBtn.addEventListener('click',function(){
+    for(let i=0;i<N;i++)setWheel(i,0,true);
+    updateDisplay();
+  });
+
+  for(let i=0;i<N;i++)setWheel(i,0,false);
+  updateDisplay();
+})();
+
+/* NAPIER BONES LOGIC */
+(function(){
+  const grid=document.getElementById('napier-grid');
+  if(!grid)return;
+  const eqEl=document.getElementById('napier-eq');
+  const diagsEl=document.getElementById('napier-diags');
+  let bones=[4,2,7], activeMult=0;
+  const dgLabels=['var(--cyan)','var(--green)','var(--orange)','var(--purple)'];
+
+  function buildGrid(){
+    const N=bones.length;
+    grid.style.gridTemplateColumns='32px repeat('+N+',52px)';
+    let html='<div class="np-hdr np-corner">×</div>';
+    bones.forEach((b,i)=>{html+=`<div class="np-hdr" data-bi="${i}">${b}</div>`});
+    for(let m=1;m<=9;m++){
+      html+=`<div class="np-mult" data-m="${m}">${m}</div>`;
+      bones.forEach(b=>{
+        const p=b*m;
+        html+=`<div class="np-cell" data-m="${m}"><span class="np-t">${Math.floor(p/10)}</span><span class="np-o">${p%10}</span></div>`;
+      });
+    }
+    grid.innerHTML=html;
+    if(activeMult)selectRow(activeMult);
+  }
+
+  function selectRow(m){
+    activeMult=m;
+    grid.querySelectorAll('.np-mult.active').forEach(el=>el.classList.remove('active'));
+    grid.querySelectorAll('.np-cell.active').forEach(el=>el.classList.remove('active'));
+    grid.querySelector(`.np-mult[data-m="${m}"]`).classList.add('active');
+    const cells=[...grid.querySelectorAll(`.np-cell[data-m="${m}"]`)];
+    cells.forEach(c=>c.classList.add('active'));
+
+    const N=bones.length;
+    const prods=bones.map(b=>({t:Math.floor(b*m/10),o:(b*m)%10}));
+
+    // Build diagonal groups: N+1 groups for N bones
+    // group 0 (rightmost) = last bone ones
+    // group k (middle) = bone[N-k].tens + bone[N-k-1].ones
+    // group N (leftmost) = first bone tens
+    const rawDiags=[];
+    rawDiags.push([prods[N-1].o]);
+    for(let k=1;k<N;k++) rawDiags.push([prods[N-k].t, prods[N-k-1].o]);
+    rawDiags.push([prods[0].t]);
+
+    // Color digits: bone i → tens in dg (N-i), ones in dg (N-1-i)
+    cells.forEach((c,ci)=>{
+      c.querySelector('.np-t').className='np-t dg-'+((N-ci)%(N+1));
+      c.querySelector('.np-o').className='np-o dg-'+(N-1-ci);
+    });
+
+    // Result with carries
+    const sums=rawDiags.map(g=>g.reduce((a,b)=>a+b,0));
+    const resDigits=[];
+    let carry=0;
+    for(let i=0;i<sums.length;i++){const v=sums[i]+carry;resDigits.push(v%10);carry=Math.floor(v/10)}
+    if(carry>0)resDigits.push(carry);
+    const result=resDigits.reverse().join('');
+    const numStr=bones.join('');
+
+    eqEl.innerHTML=`${numStr} × ${m} = <strong>${result}</strong>`;
+    diagsEl.innerHTML=rawDiags.map((g,i)=>{
+      const c=dgLabels[i%dgLabels.length];
+      const s=g.reduce((a,b)=>a+b,0);
+      return `<span class="napier-dg show" style="color:${c};border-color:${c}">${g.join('+')}${g.length>1?'='+s:''}</span>`;
+    }).reverse().join('<span style="color:var(--mut);font-size:10px">·</span>');
+  }
+
+  grid.addEventListener('click',function(e){
+    const mult=e.target.closest('.np-mult');
+    if(mult){selectRow(parseInt(mult.dataset.m));return}
+    const hdr=e.target.closest('.np-hdr[data-bi]');
+    if(hdr){
+      const bi=parseInt(hdr.dataset.bi);
+      bones[bi]=(bones[bi]+1)%10;
+      buildGrid();
+    }
+  });
+
+  buildGrid();
+  eqEl.textContent='Clique nos dígitos do topo para alterar · Multiplicador à esquerda';
+})();
+
+dotsEl.innerHTML=SECS.map((s,i)=>`<div class="dot" data-s="${i}" title="${s.name}"></div>`).join('');
+const dotEls=[...dotsEl.querySelectorAll('.dot')];
+dotEls.forEach((d,i)=>d.addEventListener('click',()=>goTo(SECS[i].first)));
+
+const timers={};
+function stopTimers(){Object.values(timers).forEach(clearInterval);for(const k in timers)delete timers[k]}
+function startCtr(id,subid,vals,subs,ms){
+  const el=document.getElementById(id),sel=document.getElementById(subid);
+  if(!el)return;let step=0;
+  const t=setInterval(()=>{el.textContent=vals[step];if(sel)sel.textContent=subs[step];step++;if(step>=vals.length)clearInterval(t)},ms);
+  timers[id]=t;
+}
+function triggerAnims(i){
+  stopTimers();
+  if(D[i].ctr){
+    startCtr(`ctr-${i}`,`ctr-sub-${i}`,
+      ['2.300','29.000','275.000','3.100.000','7.500.000.000','100.000.000.000'],
+      ['Intel 4004 · 1971','Intel 8080 · 1974','Intel 286 · 1982','Intel 486 · 1989','Apple M1 · 2020','Apple M3 Ultra · 2024'],800);
+  }
+  if(D[i].sc){
+    startCtr(`ctr-${i}`,`ctr-sub-${i}`,
+      ['166 MegaFLOPS','80 GigaFLOPS','35,8 TeraFLOPS','148,6 PetaFLOPS','1,1 ExaFLOPS'],
+      ['Cray-1 · 1976','Cray T3E · 1997','IBM Roadrunner · 2008','IBM Summit · 2018','Frontier · 2022'],1000);
+  }
+}
+
+function goTo(n){
+  if(n<0||n>=D.length)return;
+  slides[cur].classList.remove('on');
+  cur=n;
+  slides[cur].classList.add('on');
+  const s=sOf(cur);
+  prog.style.width=((cur/(D.length-1))*100).toFixed(1)+'%';
+  prog.style.background=s.color;
+  secbar.style.background=s.color;
+  document.documentElement.style.setProperty('--acc',s.color);
+  sctrEl.textContent=String(cur+1).padStart(2,'0')+' / '+D.length;
+  btnP.disabled=cur===0;btnN.disabled=cur===D.length-1;
+  const si=SECS.findIndex(sec=>cur>=sec.first&&cur<=sec.last);
+  dotEls.forEach((d,i)=>d.classList.toggle('on',i===si));
+  triggerAnims(cur);
+}
+btnP.addEventListener('click',()=>goTo(cur-1));
+btnN.addEventListener('click',()=>goTo(cur+1));
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' ')goTo(cur+1);
+  else if(e.key==='ArrowLeft')goTo(cur-1);
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+let tx0=0;
+document.addEventListener('touchstart',e=>{tx0=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-tx0;if(Math.abs(dx)>50)goTo(dx<0?cur+1:cur-1)},{passive:true});
+goTo(0);
+</script>
+</body>
+</html>

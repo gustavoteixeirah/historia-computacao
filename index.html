@@ -259,6 +259,137 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .boole-expr strong{color:var(--txt)}
 .boole-expr .bx-hi{color:var(--green);font-weight:700}
 .boole-expr .bx-lo{color:var(--red);font-weight:700}
+/* COMPILER */
+.comp-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+.comp-main{display:flex;gap:10px;width:100%;max-width:540px;align-items:stretch}
+.comp-panel{flex:1;background:var(--sf0);border:1.5px solid var(--bd2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column}
+.comp-panel-hdr{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:5px 10px;background:var(--sf1);border-bottom:1px solid var(--bd)}
+.comp-panel-hdr.src{color:var(--cyan)}
+.comp-panel-hdr.bin{color:var(--green)}
+.comp-lines{padding:6px 0;flex:1;display:flex;flex-direction:column;gap:0}
+.comp-line{display:flex;align-items:center;padding:3px 10px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#ccc;transition:all .35s;min-height:24px}
+.comp-line .ln{color:#888;font-size:11px;min-width:20px;margin-right:6px}
+.comp-line.hl{background:rgba(86,212,221,.08);color:var(--cyan)}
+.comp-line.hl-out{background:rgba(63,185,80,.08);color:var(--green)}
+.comp-line.done{color:#bbb}
+.comp-line.done-out{color:#bbb}
+.comp-line .kw{color:var(--cyan);font-weight:700}
+.comp-line .num{color:var(--orange)}
+.comp-line .op-byte{color:var(--green);font-weight:600}
+.comp-arrow{display:flex;align-items:center;justify-content:center;font-size:20px;color:#444;transition:color .3s;min-width:28px;align-self:center}
+.comp-arrow.active{color:var(--orange)}
+.comp-controls{display:flex;gap:8px;align-items:center}
+.comp-btn{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;padding:5px 16px;border-radius:6px;border:1.5px solid var(--orange);background:rgba(240,136,62,.08);color:var(--orange);cursor:pointer;transition:all .2s;letter-spacing:1px}
+.comp-btn:hover{background:rgba(240,136,62,.15)}
+.comp-btn:disabled{opacity:.3;cursor:default}
+.comp-btn.reset{border-color:#555;color:#888;background:none}
+.comp-btn.reset:hover{border-color:#888;color:#bbb}
+.comp-output{font-family:'JetBrains Mono',monospace;font-size:13px;color:#888;min-height:18px;text-align:center}
+.comp-output .co-val{color:var(--green);font-weight:700;font-size:15px}
+.comp-vars{display:flex;gap:10px;align-items:center}
+.comp-var{display:flex;align-items:center;gap:4px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#ccc}
+.comp-var input{width:36px;background:#1a1a1a;border:1.5px solid #444;border-radius:4px;padding:2px 4px;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:13px;text-align:center;outline:none}
+.comp-var input:focus{border-color:var(--cyan)}
+/* ALU */
+.alu-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+.alu-main{display:flex;align-items:stretch;gap:12px;width:100%;max-width:520px}
+.alu-regs{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.alu-reg{display:flex;flex-direction:column;gap:3px}
+.alu-reg-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
+.alu-reg-lbl .alu-dec{color:var(--cyan);font-weight:700;font-size:13px}
+.alu-bits{display:flex;gap:3px}
+.alu-bit{width:28px;height:28px;border-radius:4px;background:var(--sf1);border:1.5px solid #444;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#666;cursor:pointer;transition:all .2s;user-select:none}
+.alu-bit.on{background:rgba(86,212,221,.12);border-color:var(--cyan);color:var(--cyan)}
+.alu-bit:hover{border-color:#888}
+.alu-center{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.alu-ops{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.alu-op{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;padding:4px 8px;border-radius:5px;border:1.5px solid #444;background:var(--sf1);color:#888;cursor:pointer;transition:all .2s}
+.alu-op:hover{border-color:#888;color:#bbb}
+.alu-op.sel{border-color:var(--orange);color:var(--orange);background:rgba(240,136,62,.08)}
+.alu-box{width:80px;height:60px;background:var(--sf0);border:2px solid var(--orange);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--orange);position:relative}
+.alu-box::before,.alu-box::after{content:'';position:absolute;width:2px;height:10px;background:var(--orange)}
+.alu-box::before{top:-10px;left:25px}
+.alu-box::after{top:-10px;right:25px}
+.alu-result{display:flex;flex-direction:column;gap:3px;flex-shrink:0}
+.alu-res-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:#888;display:flex;align-items:center;gap:6px}
+.alu-res-lbl .alu-dec{color:var(--green);font-weight:700;font-size:13px}
+.alu-res-bits{display:flex;gap:3px}
+.alu-res-bit{width:28px;height:28px;border-radius:4px;background:var(--sf1);border:1.5px solid #444;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:15px;font-weight:700;color:#666}
+.alu-res-bit.on{background:rgba(63,185,80,.1);border-color:var(--green);color:var(--green)}
+.alu-flags{display:flex;gap:8px;justify-content:center}
+.alu-flag{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid #333;color:#555;transition:all .2s}
+.alu-flag.on{border-color:var(--yellow);color:var(--yellow);background:rgba(227,179,65,.08)}
+.alu-expr{font-family:'JetBrains Mono',monospace;font-size:13px;color:#aaa;text-align:center}
+.alu-expr .ax-op{color:var(--orange);font-weight:700}
+.alu-expr .ax-res{color:var(--green);font-weight:700}
+/* TUBE GATES */
+.tgates-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+.tgates-inputs{display:flex;gap:20px;align-items:center;justify-content:center}
+.tgates-sw{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+.tgates-sw-lbl{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:#888;transition:color .2s}
+.tgates-sw-lbl.on{color:var(--green)}
+.tgates-sw-track{width:40px;height:22px;border-radius:11px;background:var(--sf2);border:2px solid #555;position:relative;transition:all .25s}
+.tgates-sw-track.on{background:rgba(63,185,80,.15);border-color:var(--green)}
+.tgates-sw-track::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#888;transition:all .25s}
+.tgates-sw-track.on::after{left:20px;background:var(--green);box-shadow:0 0 6px rgba(63,185,80,.4)}
+.tgates-sw-val{font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:700;color:#888;transition:color .2s}
+.tgates-sw-val.on{color:var(--green)}
+.tgates-row{display:flex;gap:12px;justify-content:center}
+.tgate-card{background:var(--sf0);border:1.5px solid var(--bd2);border-radius:8px;padding:8px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;width:155px;transition:border-color .3s}
+.tgate-card.hi{border-color:var(--green)}
+.tgate-name{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#aaa;letter-spacing:1px}
+.tgate-desc{font-family:'JetBrains Mono',monospace;font-size:9px;color:#666}
+.tgate-svg{width:140px;height:130px}
+.tgate-svg svg{width:100%;height:100%}
+.tgate-out{display:flex;align-items:center;gap:6px}
+.tgate-out-lbl{font-family:'JetBrains Mono',monospace;font-size:11px;color:#888}
+.tgate-out-val{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--mut);transition:all .25s}
+.tgate-out-val.hi{color:var(--green);text-shadow:0 0 8px rgba(63,185,80,.4)}
+/* Tube mini symbol in SVG */
+.vt-mini{fill:none;stroke:#666;stroke-width:1.5;transition:stroke .3s}
+.vt-mini.on{stroke:var(--green)}
+.vt-filament{stroke:#a0522d;stroke-width:2.5;transition:all .3s;filter:drop-shadow(0 0 3px rgba(245,124,0,.5))}
+.vt-grid-line{stroke:#666;stroke-width:1.5;stroke-dasharray:3,2;transition:stroke .3s}
+.vt-grid-line.on{stroke:var(--green)}
+.vt-grid-line.off{stroke:var(--red)}
+.vt-wire{stroke:#555;stroke-width:2;fill:none;transition:stroke .3s}
+.vt-wire.hi{stroke:var(--green);filter:drop-shadow(0 0 3px rgba(63,185,80,.4))}
+.vt-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#888;font-weight:600}
+.vt-lbl.hi{fill:var(--green)}
+/* VACUUM TUBE */
+.vtube-wrap{display:flex;flex-direction:column;align-items:center;width:100%;gap:6px}
+.vtube-row{display:flex;align-items:center;gap:24px}
+.vtube-svg-wrap{width:200px;flex-shrink:0}
+.vtube-svg-wrap svg{width:100%;height:auto}
+.vtube-info{display:flex;flex-direction:column;gap:8px;max-width:280px}
+.vtube-toggle{display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none}
+.vtube-toggle-track{width:48px;height:26px;border-radius:13px;background:var(--sf2);border:2px solid #555;position:relative;transition:all .3s}
+.vtube-toggle-track.on{background:rgba(63,185,80,.15);border-color:var(--green)}
+.vtube-toggle-track::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#888;transition:all .3s}
+.vtube-toggle-track.on::after{left:25px;background:var(--green);box-shadow:0 0 8px rgba(63,185,80,.5)}
+.vtube-toggle-lbl{font-family:'JetBrains Mono',monospace;font-size:13px;color:#888;transition:color .3s}
+.vtube-toggle-lbl.on{color:var(--green)}
+.vtube-out{display:flex;align-items:center;gap:8px}
+.vtube-out-lbl{font-family:'JetBrains Mono',monospace;font-size:13px;color:#888}
+.vtube-out-val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:var(--mut);transition:all .3s}
+.vtube-out-val.on{color:var(--green);text-shadow:0 0 8px rgba(63,185,80,.4)}
+.vtube-legend{display:flex;flex-direction:column;gap:3px}
+.vtube-leg-item{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#888}
+.vtube-leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+/* Electron particles */
+.vt-electron{position:absolute;width:5px;height:5px;border-radius:50%;background:var(--cyan);opacity:0;box-shadow:0 0 4px var(--cyan)}
+.vtube-svg-wrap .vt-flowing .vt-electron{animation:vt-rise 1.2s ease-in-out infinite}
+.vt-electron:nth-child(2){animation-delay:.2s!important;left:42%}
+.vt-electron:nth-child(3){animation-delay:.4s!important;left:55%}
+.vt-electron:nth-child(4){animation-delay:.7s!important;left:48%}
+.vt-electron:nth-child(5){animation-delay:1s!important;left:38%}
+@keyframes vt-rise{0%{opacity:0;transform:translateY(0)}15%{opacity:.9}70%{opacity:.8}85%{opacity:0;transform:translateY(-80px)}100%{opacity:0;transform:translateY(-80px)}}
+.vt-blocked .vt-electron{animation:vt-block .8s ease-in-out infinite}
+.vt-electron.bl:nth-child(2){animation-delay:.15s!important}
+.vt-electron.bl:nth-child(3){animation-delay:.35s!important}
+.vt-electron.bl:nth-child(4){animation-delay:.55s!important}
+.vt-electron.bl:nth-child(5){animation-delay:.75s!important}
+@keyframes vt-block{0%{opacity:0;transform:translateY(0)}30%{opacity:.7;transform:translateY(-30px)}50%{opacity:.5;transform:translateY(-28px)}100%{opacity:0;transform:translateY(-20px)}}
 /* PARTICLES */
 .particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
 .pt{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--acc);opacity:0}
@@ -308,22 +439,22 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
   <div class="dots" id="dots"></div>
   <button class="nbtn" id="btn-next">→</button>
 </div>
-<div id="sctr">01 / 65</div>
+<div id="sctr">01 / 69</div>
 <div id="hint"><span class="kk">←</span><span class="kk">→</span> navegar &nbsp;·&nbsp; <span class="kk">F</span> fullscreen</div>
 
 <script>
 const SECS=[
   {name:'Introdução',       cls:'si',  color:'#58a6ff',first:0, last:1 },
   {name:'Pré-Computadores', cls:'sp',  color:'#f0883e',first:2, last:13},
-  {name:'1ª Geração',       cls:'s1g', color:'#ff7b72',first:14,last:22},
-  {name:'2ª Geração',       cls:'s2g', color:'#3fb950',first:23,last:27},
-  {name:'3ª Geração',       cls:'s3g', color:'#56d4dd',first:28,last:32},
-  {name:'4ª Geração',       cls:'s4g', color:'#a371f7',first:33,last:39},
-  {name:'Era dos PCs',      cls:'spc', color:'#e3b341',first:40,last:46},
-  {name:'Internet & Web',   cls:'sw',  color:'#58a6ff',first:47,last:53},
-  {name:'Mobile & Nuvem',   cls:'sm',  color:'#3fb950',first:54,last:58},
-  {name:'IA',               cls:'sa',  color:'#a371f7',first:59,last:62},
-  {name:'O Futuro',         cls:'sf',  color:'#c9d1d9',first:63,last:64},
+  {name:'1ª Geração',       cls:'s1g', color:'#ff7b72',first:14,last:26},
+  {name:'2ª Geração',       cls:'s2g', color:'#3fb950',first:27,last:31},
+  {name:'3ª Geração',       cls:'s3g', color:'#56d4dd',first:32,last:36},
+  {name:'4ª Geração',       cls:'s4g', color:'#a371f7',first:37,last:43},
+  {name:'Era dos PCs',      cls:'spc', color:'#e3b341',first:44,last:50},
+  {name:'Internet & Web',   cls:'sw',  color:'#58a6ff',first:51,last:57},
+  {name:'Mobile & Nuvem',   cls:'sm',  color:'#3fb950',first:58,last:62},
+  {name:'IA',               cls:'sa',  color:'#a371f7',first:63,last:66},
+  {name:'O Futuro',         cls:'sf',  color:'#c9d1d9',first:67,last:68},
 ];
 const sOf=i=>SECS.find(s=>i>=s.first&&i<=s.last)||SECS[0];
 const TH='https://upload.wikimedia.org/wikipedia/commons/thumb/';
@@ -349,11 +480,15 @@ const D=[
 /* 13 */ {year:'1936',title:'Alan Turing — O Pai da Ciência da Computação',img:WK+'a/a1/Alan_Turing_Aged_16.jpg',sq:true,txt:'Em 1936, <strong>Alan Turing</strong> publicou <em>"On Computable Numbers"</em>, introduzindo a <strong>Máquina de Turing</strong> — modelo matemático capaz de simular qualquer algoritmo. Este trabalho estabeleceu os fundamentos teóricos da computação.',t2:'Durante a Segunda Guerra Mundial, liderou a equipe de Bletchley Park que decifrou o código alemão <strong>Enigma</strong>. Em 1950, propôs o <strong>Teste de Turing</strong> para avaliar inteligência de máquinas. O Prêmio Turing, o "Nobel da Computação", foi criado em sua homenagem.'},
 /* 12 */ {year:'1943',title:'Decriptando a Enigma — A Computação na Guerra',img:TH+'3/3e/EnigmaMachineLabeled.jpg/1024px-EnigmaMachineLabeled.jpg',txt:'A máquina <strong>Enigma</strong> era usada pela Alemanha Nazista para cifrar comunicações militares. Em <strong>Bletchley Park</strong>, Turing e Tommy Flowers desenvolveram o <strong>Colossus</strong> (1943) — considerado o primeiro computador eletrônico programável.',t2:'O Colossus usava <strong>1.500 válvulas termiônicas</strong> e processava 5.000 caracteres por segundo para quebrar os códigos. A quebra da Enigma foi decisiva para o término da Segunda Guerra e permaneceu secreta por décadas.'},
 /* 13 */ {year:'1940–1955',title:'1ª Geração — As Válvulas Termiônicas',img:TH+'e/e9/Elektronenroehren-auswahl.jpg/1280px-Elektronenroehren-auswahl.jpg',txt:'A primeira geração de computadores é caracterizada pelo uso de <strong>válvulas termiônicas</strong> (tubos de vácuo). Esses computadores eram imensos, consumiam enormes quantidades de energia e atraíam insetos (origem do termo <strong>"bug"</strong>).',bl:['Tamanho · salas inteiras (centenas de m²)','Velocidade · milhares de operações/segundo','Memória · tambores magnéticos e cartões perfurados','Programação · linguagem de máquina (binário puro)']},
-/* 14 */ {year:'1946',title:'ENIAC — O Gigante Eletrônico',img:TH+'6/6c/ENIAC_Penn1.jpg/1280px-ENIAC_Penn1.jpg',txt:'O <strong>ENIAC</strong> (Electronic Numerical Integrator and Computer), apresentado em 14 de fevereiro de 1946 na Universidade da Pensilvânia, tinha <strong>18.000 tubos de vácuo</strong>, pesava 30 toneladas, ocupava 167 m² e consumia 150 kW.',t2:'Seis mulheres programadoras — as <strong>"ENIAC Girls"</strong> — foram responsáveis por programá-lo: Betty Jennings, Frances Bilas, Betty Holberton, Marlyn Wescoff, Ruth Lichterman e Kay McNulty. Elas nunca receberam o reconhecimento merecido na época.'},
+/* 14 */ {year:'1940',title:'Como Funciona a Válvula Termiônica',vtube:true,txt:'A válvula é um <strong>switch eletrônico</strong>: o cátodo aquecido emite elétrons, a grade controla a passagem, e o ânodo coleta. É o mesmo princípio do transistor — mas do tamanho de uma lâmpada e consumindo <strong>centenas de watts</strong>.'},
+/* 15 */ {year:'1940',title:'De Válvulas a Portas Lógicas',tgates:true,txt:'Combinando válvulas em <strong>série</strong> (AND), <strong>paralelo</strong> (OR) ou <strong>invertendo</strong> a saída (NOT), construímos toda a lógica booleana em hardware. O ENIAC usava 18.000 válvulas para formar esses circuitos.'},
+/* 16 */ {year:'1946',title:'ENIAC — O Gigante Eletrônico',img:TH+'6/6c/ENIAC_Penn1.jpg/1280px-ENIAC_Penn1.jpg',txt:'O <strong>ENIAC</strong> (Electronic Numerical Integrator and Computer), apresentado em 14 de fevereiro de 1946 na Universidade da Pensilvânia, tinha <strong>18.000 tubos de vácuo</strong>, pesava 30 toneladas, ocupava 167 m² e consumia 150 kW.',t2:'Seis mulheres programadoras — as <strong>"ENIAC Girls"</strong> — foram responsáveis por programá-lo: Betty Jennings, Frances Bilas, Betty Holberton, Marlyn Wescoff, Ruth Lichterman e Kay McNulty. Elas nunca receberam o reconhecimento merecido na época.'},
 /* 15 */ {year:'1945',title:'Von Neumann — A Arquitetura que Persiste até Hoje',img:TH+'e/e5/Von_Neumann_Architecture.svg/1280px-Von_Neumann_Architecture.svg.png',txt:'Em 1945, <strong>John von Neumann</strong> publicou o conceito fundamental que define os computadores até hoje: o <strong>programa armazenado na memória</strong>. Antes, os computadores eram reprogramados fisicamente por cabos.',bl:['Unidade de Controle · coordena todas as operações','ULA · realiza operações aritméticas e lógicas','Memória · armazena dados E instruções juntos','Entrada/Saída · comunicação com o mundo externo']},
-/* 16 */ {year:'1951',title:'UNIVAC I — O Primeiro Computador Comercial',img:TH+'9/9a/Univac_I_at_Census_Bureau_with_two_operators.jpg/1280px-Univac_I_at_Census_Bureau_with_two_operators.jpg',txt:'Em março de 1951, o <strong>UNIVAC I</strong> foi entregue ao Bureau do Censo dos EUA — o primeiro computador comercial americano. Desenvolvido por Eckert e Mauchly, os mesmos criadores do ENIAC.',t2:'Ficou famoso em 1952 quando <strong>previu corretamente a eleição presidencial</strong> de Eisenhower com apenas 5% dos votos apurados — transmitido ao vivo pela CBS. Foram vendidas 46 unidades entre 1951 e 1958.'},
+/* 16 */ {year:'1945',title:'A ULA — O Cérebro Aritmético',alu:true,txt:'A <strong>ULA</strong> (Unidade Lógica e Aritmética) recebe dois números, aplica uma operação e devolve o resultado. Clique nos <strong>bits</strong> para alterar as entradas e escolha a <strong>operação</strong>. Tudo que um computador faz é isso — bilhões de vezes por segundo.'},
+/* 17 */ {year:'1951',title:'UNIVAC I — O Primeiro Computador Comercial',img:TH+'9/9a/Univac_I_at_Census_Bureau_with_two_operators.jpg/1280px-Univac_I_at_Census_Bureau_with_two_operators.jpg',txt:'Em março de 1951, o <strong>UNIVAC I</strong> foi entregue ao Bureau do Censo dos EUA — o primeiro computador comercial americano. Desenvolvido por Eckert e Mauchly, os mesmos criadores do ENIAC.',t2:'Ficou famoso em 1952 quando <strong>previu corretamente a eleição presidencial</strong> de Eisenhower com apenas 5% dos votos apurados — transmitido ao vivo pela CBS. Foram vendidas 46 unidades entre 1951 e 1958.'},
 /* 17 */ {year:'1952',title:'Grace Hopper — A Almirante que Criou o Compilador',img:WK+'a/ad/Commodore_Grace_M._Hopper%2C_USN_%28covered%29.jpg',sq:true,qt:'"It\'s easier to ask forgiveness than it is to get permission." — Grace Hopper',txt:'A Contra-Almirante <strong>Grace Murray Hopper</strong> encontrou o primeiro "bug" real em 1945 — uma mariposa que havia travado um relé do Harvard Mark II. Em 1952, desenvolveu o <strong>A-0</strong>, o primeiro <strong>compilador</strong>.',t2:'O compilador traduzia código próximo da linguagem humana para linguagem de máquina. Essa ideia revolucionária abriu caminho para linguagens de alto nível. Hopper também liderou o desenvolvimento do <strong>COBOL</strong> (1959), usado em trilhões de transações hoje.'},
-/* 18 */ {year:'1955–1964',title:'2ª Geração — Os Transistores',img:TH+'2/21/Transistorer_%28cropped%29.jpg/1280px-Transistorer_%28cropped%29.jpg',txt:'Em 23 de dezembro de 1947, <strong>Bardeen, Brattain e Shockley</strong>, dos Bell Labs, inventaram o <strong>transistor</strong> — premiado com o Nobel de Física em 1956. Menor, mais confiável, com menos calor e consumo.',bl:['Tamanho · armários (não mais salas inteiras)','Velocidade · dezenas de milhares de ops/segundo','Memória · núcleos de ferrite magnética','Linguagens · FORTRAN, COBOL, LISP']},
+/* 18 */ {year:'1952',title:'O Compilador — Traduzindo para a Máquina',compiler:true,txt:'Antes de Hopper, programadores escreviam <strong>diretamente em binário</strong>. O compilador traduz linguagem humana para código de máquina — e ninguém acreditou que era possível. Altere os valores e clique <strong>COMPILAR</strong>.'},
+/* 19 */ {year:'1955–1964',title:'2ª Geração — Os Transistores',img:TH+'2/21/Transistorer_%28cropped%29.jpg/1280px-Transistorer_%28cropped%29.jpg',txt:'Em 23 de dezembro de 1947, <strong>Bardeen, Brattain e Shockley</strong>, dos Bell Labs, inventaram o <strong>transistor</strong> — premiado com o Nobel de Física em 1956. Menor, mais confiável, com menos calor e consumo.',bl:['Tamanho · armários (não mais salas inteiras)','Velocidade · dezenas de milhares de ops/segundo','Memória · núcleos de ferrite magnética','Linguagens · FORTRAN, COBOL, LISP']},
 /* 19 */ {year:'1947',title:'O Transistor — A Invenção que Mudou Tudo',img:WK+'b/bf/Replica-of-first-transistor.jpg',sq:true,ctr:true,txt:'O <strong>transistor</strong> funciona como uma chave eletrônica que pode ser ligada ou desligada bilhões de vezes por segundo. Feito de materiais <strong>semicondutores</strong> como germânio e silício, substituiu as frágeis válvulas termiônicas.',t2:'A transição reduziu o tamanho dos computadores por um fator de 200 e o consumo de energia por 10.000. A <strong>Lei de Moore</strong> (1965) observou que o número de transistores dobra a cada ~dois anos — profecia autorrealizada por 50 anos.'},
 /* 20 */ {year:'1957–1959',title:'As Primeiras Linguagens de Programação',img:WK+'3/37/Grace_Hopper_and_UNIVAC.jpg',tw:'fortran',txt:'Em 1957, <strong>John Backus</strong> e sua equipe na IBM entregaram o <strong>FORTRAN</strong> (Formula Translator). Em 1959, o <strong>COBOL</strong>, liderado por Grace Hopper, foi criado para aplicações de negócios.',t2:'O COBOL ainda roda em mais de 95% dos sistemas de cartão de crédito e processa transações no valor de <strong>trilhões de dólares</strong> diariamente.'},
 /* 21 */ {year:'1964–1971',title:'3ª Geração — Circuitos Integrados',img:TH+'5/5c/Microchips.jpg/1280px-Microchips.jpg',txt:'Em 1958, <strong>Jack Kilby</strong> (Texas Instruments) e <strong>Robert Noyce</strong> (Fairchild Semiconductor) inventaram independentemente o <strong>circuito integrado</strong> — chip de silício com múltiplos transistores em uma única peça.',bl:['Tamanho · armários menores e minicomputadores','Velocidade · milhões de operações por segundo','SO · surgimento dos sistemas operacionais','Compatibilidade · IBM System/360 (1964)']},
@@ -499,6 +634,160 @@ function render(d,i){
       <p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p>
     </div>`;
     return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${bcBody}</section>`;
+  }
+
+  if(d.compiler){
+    const compBody=`<div class="comp-wrap">
+      <div class="comp-vars"><div class="comp-var">X = <input id="comp-x" type="number" value="5" min="0" max="99"></div><div class="comp-var">Y = <input id="comp-y" type="number" value="3" min="0" max="99"></div></div>
+      <div class="comp-main">
+        <div class="comp-panel"><div class="comp-panel-hdr src">Código Fonte</div><div class="comp-lines" id="comp-src"></div></div>
+        <div class="comp-arrow" id="comp-arrow">→</div>
+        <div class="comp-panel"><div class="comp-panel-hdr bin">Código de Máquina</div><div class="comp-lines" id="comp-bin"></div></div>
+      </div>
+      <div class="comp-controls"><button class="comp-btn" id="comp-go">COMPILAR</button><button class="comp-btn reset" id="comp-reset">RESETAR</button></div>
+      <div class="comp-output" id="comp-out"></div>
+      <p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p>
+    </div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${compBody}</section>`;
+  }
+
+  if(d.alu){
+    const BITS=4;
+    const ops=['ADD','SUB','AND','OR','XOR'];
+    function regBits(id,lbl){
+      const bits=Array.from({length:BITS},(_,j)=>`<div class="alu-bit" data-reg="${id}" data-b="${j}">0</div>`).join('');
+      return `<div class="alu-reg"><div class="alu-reg-lbl">${lbl} <span class="alu-dec" id="alu-dec-${id}">= 0</span></div><div class="alu-bits" id="alu-bits-${id}">${bits}</div></div>`;
+    }
+    const resBits=Array.from({length:BITS+1},(_,j)=>`<div class="alu-res-bit" data-b="${j}">0</div>`).join('');
+    const opsHtml=ops.map((op,i)=>`<div class="alu-op${i===0?' sel':''}" data-op="${op}">${op}</div>`).join('');
+    const aluBody=`<div class="alu-wrap">
+      <div class="alu-main">
+        <div class="alu-regs">${regBits('a','Entrada A')}${regBits('b','Entrada B')}</div>
+        <div class="alu-center">
+          <div class="alu-ops" id="alu-ops">${opsHtml}</div>
+          <div class="alu-box">ULA</div>
+        </div>
+        <div class="alu-result">
+          <div class="alu-res-lbl">Saída <span class="alu-dec" id="alu-dec-r">= 0</span></div>
+          <div class="alu-res-bits" id="alu-res-bits">${resBits}</div>
+          <div class="alu-flags" id="alu-flags">
+            <div class="alu-flag" id="alu-f-carry">CARRY</div>
+            <div class="alu-flag" id="alu-f-zero">ZERO</div>
+            <div class="alu-flag" id="alu-f-neg">NEG</div>
+          </div>
+        </div>
+      </div>
+      <div class="alu-expr" id="alu-expr"></div>
+      <p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p>
+    </div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${aluBody}</section>`;
+  }
+
+  if(d.tgates){
+    // Helper: mini vacuum tube SVG at position (cx,cy), id prefix
+    function miniTube(cx,cy,id){
+      return `<ellipse cx="${cx}" cy="${cy}" rx="18" ry="30" class="vt-mini" id="${id}-env"/>
+        <path d="M${cx-8},${cy+18} Q${cx},${cy+12} ${cx+8},${cy+18}" class="vt-filament"/>
+        <line x1="${cx-12}" y1="${cy}" x2="${cx+12}" y2="${cy}" class="vt-grid-line" id="${id}-g"/>
+        <line x1="${cx-10}" y1="${cy+4}" x2="${cx+10}" y2="${cy+4}" class="vt-grid-line" id="${id}-g2"/>`;
+    }
+    // NOT: single tube, output inverted
+    const notSvg=`<svg viewBox="0 0 140 130">
+      <line x1="10" y1="65" x2="52" y2="65" class="vt-wire" id="tg-not-wA"/>
+      <text x="6" y="69" class="vt-lbl" id="tg-not-lA">A</text>
+      ${miniTube(70,65,'tg-not-t1')}
+      <line x1="70" y1="35" x2="70" y2="15" class="vt-wire" id="tg-not-vcc"/>
+      <text x="70" y="10" class="vt-lbl" text-anchor="middle" style="font-size:8px;fill:#666">V+</text>
+      <line x1="88" y1="65" x2="120" y2="65" class="vt-wire" id="tg-not-wOut"/>
+      <circle cx="120" cy="65" r="6" fill="none" stroke="#888" stroke-width="1.5" id="tg-not-bulb"/>
+      <text x="120" y="69" class="vt-lbl hi" text-anchor="middle" id="tg-not-oval">1</text>
+    </svg>`;
+    // AND: two tubes in series (vertical stack)
+    const andSvg=`<svg viewBox="0 0 140 130">
+      <line x1="10" y1="38" x2="52" y2="38" class="vt-wire" id="tg-and-wA"/>
+      <text x="6" y="42" class="vt-lbl" id="tg-and-lA">A</text>
+      ${miniTube(70,38,'tg-and-t1')}
+      <line x1="70" y1="8" x2="70" y2="3" class="vt-wire"/>
+      <text x="70" y="0" class="vt-lbl" text-anchor="middle" style="font-size:8px;fill:#666">V+</text>
+      <line x1="70" y1="68" x2="70" y2="62" class="vt-wire" id="tg-and-mid"/>
+      ${miniTube(70,92,'tg-and-t2')}
+      <line x1="10" y1="92" x2="52" y2="92" class="vt-wire" id="tg-and-wB"/>
+      <text x="6" y="96" class="vt-lbl" id="tg-and-lB">B</text>
+      <line x1="88" y1="65" x2="120" y2="65" class="vt-wire" id="tg-and-wOut"/>
+      <circle cx="120" cy="65" r="6" fill="none" stroke="#888" stroke-width="1.5" id="tg-and-bulb"/>
+      <text x="120" y="69" class="vt-lbl" text-anchor="middle" id="tg-and-oval">0</text>
+      <text x="70" y="128" class="vt-lbl" text-anchor="middle" style="font-size:8px;fill:#555">em série</text>
+    </svg>`;
+    // OR: two tubes in parallel (side by side)
+    const orSvg=`<svg viewBox="0 0 140 130">
+      <line x1="10" y1="45" x2="32" y2="45" class="vt-wire" id="tg-or-wA"/>
+      <text x="6" y="49" class="vt-lbl" id="tg-or-lA">A</text>
+      ${miniTube(50,45,'tg-or-t1')}
+      <line x1="50" y1="15" x2="50" y2="5" class="vt-wire"/>
+      <line x1="10" y1="90" x2="72" y2="90" class="vt-wire" id="tg-or-wB"/>
+      <text x="6" y="94" class="vt-lbl" id="tg-or-lB">B</text>
+      ${miniTube(90,90,'tg-or-t2')}
+      <line x1="90" y1="60" x2="90" y2="5" class="vt-wire"/>
+      <text x="70" y="3" class="vt-lbl" text-anchor="middle" style="font-size:8px;fill:#666">V+</text>
+      <line x1="68" y1="45" x2="100" y2="45" class="vt-wire" id="tg-or-mid1"/>
+      <line x1="108" y1="90" x2="120" y2="90" class="vt-wire" id="tg-or-mid2"/>
+      <line x1="100" y1="45" x2="120" y2="67" class="vt-wire" id="tg-or-join1"/>
+      <line x1="120" y1="90" x2="120" y2="73" class="vt-wire" id="tg-or-join2"/>
+      <circle cx="120" cy="70" r="6" fill="none" stroke="#888" stroke-width="1.5" id="tg-or-bulb"/>
+      <text x="120" y="74" class="vt-lbl" text-anchor="middle" id="tg-or-oval">0</text>
+      <text x="70" y="128" class="vt-lbl" text-anchor="middle" style="font-size:8px;fill:#555">em paralelo</text>
+    </svg>`;
+    const tgBody=`<div class="tgates-wrap">
+      <div class="tgates-inputs" id="tgates-inputs">
+        <div class="tgates-sw" data-i="0"><span class="tgates-sw-lbl" id="tg-la">A</span><div class="tgates-sw-track" id="tg-ta"></div><span class="tgates-sw-val" id="tg-va">0</span></div>
+        <div class="tgates-sw" data-i="1"><span class="tgates-sw-lbl" id="tg-lb">B</span><div class="tgates-sw-track" id="tg-tb"></div><span class="tgates-sw-val" id="tg-vb">0</span></div>
+      </div>
+      <div class="tgates-row">
+        <div class="tgate-card" id="tg-card-not"><div class="tgate-name">NOT A</div><div class="tgate-desc">1 válvula · inverte</div><div class="tgate-svg">${notSvg}</div><div class="tgate-out"><span class="tgate-out-lbl">Saída:</span><span class="tgate-out-val hi" id="tg-out-not">1</span></div></div>
+        <div class="tgate-card" id="tg-card-and"><div class="tgate-name">A AND B</div><div class="tgate-desc">2 válvulas em série</div><div class="tgate-svg">${andSvg}</div><div class="tgate-out"><span class="tgate-out-lbl">Saída:</span><span class="tgate-out-val" id="tg-out-and">0</span></div></div>
+        <div class="tgate-card" id="tg-card-or"><div class="tgate-name">A OR B</div><div class="tgate-desc">2 válvulas em paralelo</div><div class="tgate-svg">${orSvg}</div><div class="tgate-out"><span class="tgate-out-lbl">Saída:</span><span class="tgate-out-val" id="tg-out-or">0</span></div></div>
+      </div>
+      <p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p>
+    </div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${tgBody}</section>`;
+  }
+
+  if(d.vtube){
+    const svg=`<svg viewBox="0 0 180 280" xmlns="http://www.w3.org/2000/svg">
+      <!-- Glass envelope -->
+      <path d="M40,40 Q40,10 90,10 Q140,10 140,40 L140,220 Q140,250 90,250 Q40,250 40,220 Z" fill="none" stroke="#555" stroke-width="2" opacity=".4"/>
+      <path d="M40,40 Q40,10 90,10 Q140,10 140,40 L140,220 Q140,250 90,250 Q40,250 40,220 Z" fill="rgba(255,255,255,.02)"/>
+      <!-- Anode (plate) at top -->
+      <rect id="vt-anode" x="55" y="35" width="70" height="28" rx="4" fill="none" stroke="#888" stroke-width="2.5"/>
+      <text x="90" y="53" text-anchor="middle" fill="#aaa" font-size="11" font-weight="700" font-family="JetBrains Mono">ÂNODO</text>
+      <text x="90" y="27" text-anchor="middle" fill="#666" font-size="9" font-family="JetBrains Mono">(+) coleta e⁻</text>
+      <!-- Grid (control) in middle -->
+      <line x1="52" y1="130" x2="128" y2="130" stroke="#666" stroke-width="2" stroke-dasharray="6,4" id="vt-grid"/>
+      <line x1="52" y1="137" x2="128" y2="137" stroke="#666" stroke-width="2" stroke-dasharray="6,4" id="vt-grid2"/>
+      <text x="90" y="155" text-anchor="middle" fill="#aaa" font-size="11" font-weight="700" font-family="JetBrains Mono" id="vt-grid-lbl">GRADE</text>
+      <text x="90" y="167" text-anchor="middle" fill="#666" font-size="9" font-family="JetBrains Mono">controla fluxo</text>
+      <!-- Cathode (filament) at bottom -->
+      <path d="M65,215 Q75,205 90,215 Q105,225 115,215" fill="none" stroke="#888" stroke-width="3" id="vt-cathode"/>
+      <text x="90" y="242" text-anchor="middle" fill="#aaa" font-size="11" font-weight="700" font-family="JetBrains Mono">CÁTODO</text>
+      <text x="90" y="254" text-anchor="middle" fill="#666" font-size="9" font-family="JetBrains Mono">aquece → emite e⁻</text>
+      <!-- Pins at bottom -->
+      <line x1="70" y1="250" x2="70" y2="275" stroke="#888" stroke-width="2"/>
+      <line x1="90" y1="250" x2="90" y2="275" stroke="#888" stroke-width="2"/>
+      <line x1="110" y1="250" x2="110" y2="275" stroke="#888" stroke-width="2"/>
+      <!-- Signal arrow to grid -->
+      <line x1="15" y1="133" x2="48" y2="133" stroke="#666" stroke-width="2" id="vt-signal-wire"/>
+      <text x="10" y="137" text-anchor="middle" fill="#888" font-size="12" font-weight="700" font-family="JetBrains Mono" id="vt-signal-lbl">→</text>
+    </svg>
+    <!-- Electron container (absolute positioned over SVG) -->
+    <div id="vt-electrons" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none" class="vt-blocked">
+      <div class="vt-electron" style="left:45%;bottom:28%"></div>
+      <div class="vt-electron" style="left:42%;bottom:28%"></div>
+      <div class="vt-electron" style="left:55%;bottom:28%"></div>
+      <div class="vt-electron" style="left:48%;bottom:28%"></div>
+      <div class="vt-electron" style="left:38%;bottom:28%"></div>
+    </div>`;
+    const vtBody=`<div class="vtube-wrap"><div class="vtube-row"><div class="vtube-svg-wrap" style="position:relative">${svg}</div><div class="vtube-info"><div class="vtube-toggle" id="vt-toggle"><div class="vtube-toggle-track" id="vt-track"></div><span class="vtube-toggle-lbl" id="vt-tlbl">Sinal na Grade: OFF</span></div><div class="vtube-out"><span class="vtube-out-lbl">Saída:</span><span class="vtube-out-val" id="vt-out">0 — bloqueado</span></div><div class="vtube-legend"><div class="vtube-leg-item"><div class="vtube-leg-dot" style="background:var(--orange)"></div>Cátodo aquecido (emite elétrons)</div><div class="vtube-leg-item"><div class="vtube-leg-dot" style="background:var(--cyan)"></div>Elétrons (e⁻) — partículas azuis</div><div class="vtube-leg-item"><div class="vtube-leg-dot" style="background:var(--green)"></div>Grade aberta → corrente flui</div><div class="vtube-leg-item"><div class="vtube-leg-dot" style="background:var(--red)"></div>Grade fechada → corrente bloqueada</div></div></div></div><p style="font-size:12px;color:var(--dim);max-width:100%;text-align:center;margin-top:2px;line-height:1.5">${d.txt}</p></div>`;
+    return `<section class="slide ${s.cls}" data-i="${i}">${h}<h1 class="ttl">${d.title}</h1>${vtBody}</section>`;
   }
 
   if(d.hollerith){
@@ -701,6 +990,304 @@ const slides=[...deck.querySelectorAll('.slide')];
     if(!sw)return;
     const id=sw.dataset.id;
     state[id]=state[id]?0:1;
+    update();
+  });
+
+  update();
+})();
+
+/* COMPILER LOGIC */
+(function(){
+  const goBtn=document.getElementById('comp-go');
+  if(!goBtn)return;
+  const srcEl=document.getElementById('comp-src');
+  const binEl=document.getElementById('comp-bin');
+  const arrowEl=document.getElementById('comp-arrow');
+  const outEl=document.getElementById('comp-out');
+  const resetBtn=document.getElementById('comp-reset');
+  const xIn=document.getElementById('comp-x');
+  const yIn=document.getElementById('comp-y');
+  let busy=false;
+
+  function toBin(n,bits){return n.toString(2).padStart(bits,'0')}
+
+  function buildCode(){
+    const x=Math.max(0,Math.min(99,parseInt(xIn.value)||0));
+    const y=Math.max(0,Math.min(99,parseInt(yIn.value)||0));
+    const result=x+y;
+    const src=[
+      {code:`<span class="kw">SET</span> X = <span class="num">${x}</span>`,comment:'carrega X'},
+      {code:`<span class="kw">SET</span> Y = <span class="num">${y}</span>`,comment:'carrega Y'},
+      {code:`<span class="kw">ADD</span> X, Y`,comment:'soma'},
+      {code:`<span class="kw">PRINT</span> RESULT`,comment:'saída'},
+    ];
+    const bin=[
+      {code:`<span class="op-byte">0001</span> ${toBin(x,8)}`,comment:`LOAD ${x}`},
+      {code:`<span class="op-byte">0001</span> ${toBin(y,8)}`,comment:`LOAD ${y}`},
+      {code:`<span class="op-byte">0010</span> 00000000`,comment:'ADD'},
+      {code:`<span class="op-byte">0011</span> 00000000`,comment:'OUT'},
+    ];
+    return {src,bin,result};
+  }
+
+  function renderIdle(){
+    const {src,bin}=buildCode();
+    srcEl.innerHTML=src.map((l,i)=>`<div class="comp-line" data-i="${i}"><span class="ln">${i+1}</span>${l.code}</div>`).join('');
+    binEl.innerHTML=bin.map((l,i)=>`<div class="comp-line" data-i="${i}" style="opacity:.2"><span class="ln">${i+1}</span>${l.code} <span style="color:#555;font-size:9px">; ${l.comment}</span></div>`).join('');
+    arrowEl.classList.remove('active');
+    outEl.innerHTML='';
+  }
+
+  function runCompile(){
+    if(busy)return;
+    busy=true;goBtn.disabled=true;
+    const {src,bin,result}=buildCode();
+
+    // Reset display
+    srcEl.innerHTML=src.map((l,i)=>`<div class="comp-line" data-i="${i}"><span class="ln">${i+1}</span>${l.code}</div>`).join('');
+    binEl.innerHTML=bin.map((l,i)=>`<div class="comp-line" data-i="${i}" style="opacity:.15"><span class="ln">${i+1}</span>${l.code} <span style="color:#555;font-size:9px">; ${l.comment}</span></div>`).join('');
+    outEl.innerHTML='';
+
+    const srcLines=srcEl.querySelectorAll('.comp-line');
+    const binLines=binEl.querySelectorAll('.comp-line');
+    const total=src.length;
+
+    // Animate line by line
+    for(let step=0;step<total;step++){
+      // Highlight source line
+      setTimeout(()=>{
+        srcLines.forEach(l=>l.classList.remove('hl'));
+        srcLines[step].classList.add('hl');
+        arrowEl.classList.add('active');
+      },step*700);
+
+      // Reveal binary line
+      setTimeout(()=>{
+        binLines[step].style.opacity='1';
+        binLines[step].classList.add('hl-out');
+      },step*700+350);
+
+      // Mark done
+      setTimeout(()=>{
+        srcLines[step].classList.remove('hl');
+        srcLines[step].classList.add('done');
+        binLines[step].classList.remove('hl-out');
+        binLines[step].classList.add('done-out');
+        arrowEl.classList.remove('active');
+      },step*700+600);
+    }
+
+    // Show result
+    setTimeout(()=>{
+      outEl.innerHTML=`Resultado: <span class="co-val">${result}</span>`;
+      busy=false;goBtn.disabled=false;
+    },total*700+200);
+  }
+
+  goBtn.addEventListener('click',runCompile);
+  resetBtn.addEventListener('click',renderIdle);
+  xIn.addEventListener('change',renderIdle);
+  yIn.addEventListener('change',renderIdle);
+
+  renderIdle();
+})();
+
+/* ALU LOGIC */
+(function(){
+  const opsEl=document.getElementById('alu-ops');
+  if(!opsEl)return;
+  const BITS=4, MAX=(1<<BITS);
+  const regA=[0,0,0,0], regB=[0,0,0,0];
+  let curOp='ADD';
+
+  function bitsToNum(bits){return bits.reduce((acc,b,i)=>acc+(b<<(BITS-1-i)),0)}
+  function numToBits(n,len){return Array.from({length:len},(_,i)=>(n>>(len-1-i))&1)}
+
+  function update(){
+    const A=bitsToNum(regA), B=bitsToNum(regB);
+    // Update input displays
+    ['a','b'].forEach(id=>{
+      const reg=id==='a'?regA:regB;
+      const bits=document.getElementById('alu-bits-'+id).querySelectorAll('.alu-bit');
+      bits.forEach((el,i)=>{el.textContent=reg[i];el.classList.toggle('on',!!reg[i])});
+      document.getElementById('alu-dec-'+id).textContent='= '+bitsToNum(reg);
+    });
+
+    // Compute
+    let result,carry=0,opSym='';
+    switch(curOp){
+      case 'ADD': result=A+B; carry=result>=MAX?1:0; result&=(MAX-1); opSym='+'; break;
+      case 'SUB': result=A-B; carry=result<0?1:0; result=(result+MAX)%MAX; opSym='-'; break;
+      case 'AND': result=A&B; opSym='&'; break;
+      case 'OR':  result=A|B; opSym='|'; break;
+      case 'XOR': result=A^B; opSym='^'; break;
+      default: result=0;
+    }
+    const zero=result===0?1:0;
+    const neg=(curOp==='SUB'&&A<B)?1:0;
+    const resBits=numToBits(result,BITS);
+
+    // Result bits (show carry as extra bit for ADD/SUB)
+    const resEls=document.getElementById('alu-res-bits').querySelectorAll('.alu-res-bit');
+    resEls[0].textContent=carry;
+    resEls[0].classList.toggle('on',!!carry);
+    resEls[0].style.opacity=(curOp==='ADD'||curOp==='SUB')?'1':'.2';
+    for(let i=0;i<BITS;i++){
+      resEls[i+1].textContent=resBits[i];
+      resEls[i+1].classList.toggle('on',!!resBits[i]);
+    }
+    document.getElementById('alu-dec-r').textContent='= '+result;
+
+    // Flags
+    document.getElementById('alu-f-carry').classList.toggle('on',!!carry);
+    document.getElementById('alu-f-zero').classList.toggle('on',!!zero);
+    document.getElementById('alu-f-neg').classList.toggle('on',!!neg);
+
+    // Op buttons
+    opsEl.querySelectorAll('.alu-op').forEach(el=>el.classList.toggle('sel',el.dataset.op===curOp));
+
+    // Expression
+    const aBin=regA.join(''), bBin=regB.join(''), rBin=resBits.join('');
+    document.getElementById('alu-expr').innerHTML=
+      `${aBin} <span class="ax-op">${curOp}</span> ${bBin} = <span class="ax-res">${carry&&(curOp==='ADD'||curOp==='SUB')?carry:''}${rBin}</span> → ${A} <span class="ax-op">${opSym}</span> ${B} = <span class="ax-res">${curOp==='SUB'&&neg?'-'+(MAX-result):result}</span>`;
+  }
+
+  // Bit click
+  document.addEventListener('click',function(e){
+    const bit=e.target.closest('.alu-bit');
+    if(bit){
+      const reg=bit.dataset.reg==='a'?regA:regB;
+      const idx=parseInt(bit.dataset.b);
+      reg[idx]=reg[idx]?0:1;
+      update();
+      return;
+    }
+    const op=e.target.closest('.alu-op');
+    if(op){curOp=op.dataset.op;update()}
+  });
+
+  update();
+})();
+
+/* TUBE GATES LOGIC */
+(function(){
+  const inputsEl=document.getElementById('tgates-inputs');
+  if(!inputsEl)return;
+  let A=0,B=0;
+
+  function hi(id,on){const el=document.getElementById(id);if(el)el.classList.toggle('hi',on)}
+  function hiOff(id,on){const el=document.getElementById(id);if(el){el.classList.toggle('on',on);el.classList.toggle('off',!on)}}
+
+  function update(){
+    // Toggles
+    document.getElementById('tg-ta').classList.toggle('on',!!A);
+    document.getElementById('tg-tb').classList.toggle('on',!!B);
+    document.getElementById('tg-la').classList.toggle('on',!!A);
+    document.getElementById('tg-lb').classList.toggle('on',!!B);
+    document.getElementById('tg-va').textContent=A;
+    document.getElementById('tg-va').classList.toggle('on',!!A);
+    document.getElementById('tg-vb').textContent=B;
+    document.getElementById('tg-vb').classList.toggle('on',!!B);
+
+    const notOut=A?0:1, andOut=A&B, orOut=A|B;
+
+    // NOT gate
+    hi('tg-not-wA',!!A); hiOff('tg-not-t1-g',!!A); hiOff('tg-not-t1-g2',!!A);
+    hi('tg-not-t1-env',!!notOut); hi('tg-not-wOut',!!notOut); hi('tg-not-bulb',!!notOut);
+    const notOval=document.getElementById('tg-not-oval');
+    notOval.textContent=notOut; notOval.classList.toggle('hi',!!notOut);
+    hi('tg-card-not',!!notOut);
+    const notOutEl=document.getElementById('tg-out-not');
+    notOutEl.textContent=notOut; notOutEl.classList.toggle('hi',!!notOut);
+    hi('tg-not-lA',!!A);
+
+    // AND gate (series: both must be on)
+    hi('tg-and-wA',!!A); hiOff('tg-and-t1-g',!!A); hiOff('tg-and-t1-g2',!!A);
+    hi('tg-and-wB',!!B); hiOff('tg-and-t2-g',!!B); hiOff('tg-and-t2-g2',!!B);
+    hi('tg-and-mid',!!andOut);
+    hi('tg-and-t1-env',!!A); hi('tg-and-t2-env',!!B);
+    hi('tg-and-wOut',!!andOut); hi('tg-and-bulb',!!andOut);
+    const andOval=document.getElementById('tg-and-oval');
+    andOval.textContent=andOut; andOval.classList.toggle('hi',!!andOut);
+    hi('tg-card-and',!!andOut);
+    const andOutEl=document.getElementById('tg-out-and');
+    andOutEl.textContent=andOut; andOutEl.classList.toggle('hi',!!andOut);
+    hi('tg-and-lA',!!A); hi('tg-and-lB',!!B);
+
+    // OR gate (parallel: either on)
+    hi('tg-or-wA',!!A); hiOff('tg-or-t1-g',!!A); hiOff('tg-or-t1-g2',!!A);
+    hi('tg-or-wB',!!B); hiOff('tg-or-t2-g',!!B); hiOff('tg-or-t2-g2',!!B);
+    hi('tg-or-t1-env',!!A); hi('tg-or-t2-env',!!B);
+    hi('tg-or-mid1',!!A); hi('tg-or-mid2',!!B);
+    hi('tg-or-join1',!!A); hi('tg-or-join2',!!B);
+    hi('tg-or-bulb',!!orOut);
+    const orOval=document.getElementById('tg-or-oval');
+    orOval.textContent=orOut; orOval.classList.toggle('hi',!!orOut);
+    hi('tg-card-or',!!orOut);
+    const orOutEl=document.getElementById('tg-out-or');
+    orOutEl.textContent=orOut; orOutEl.classList.toggle('hi',!!orOut);
+    hi('tg-or-lA',!!A); hi('tg-or-lB',!!B);
+  }
+
+  inputsEl.addEventListener('click',function(e){
+    const sw=e.target.closest('.tgates-sw');
+    if(!sw)return;
+    const i=parseInt(sw.dataset.i);
+    if(i===0)A=A?0:1; else B=B?0:1;
+    update();
+  });
+
+  update();
+})();
+
+/* VACUUM TUBE LOGIC */
+(function(){
+  const toggle=document.getElementById('vt-toggle');
+  if(!toggle)return;
+  let on=false;
+
+  function update(){
+    const track=document.getElementById('vt-track');
+    const lbl=document.getElementById('vt-tlbl');
+    const out=document.getElementById('vt-out');
+    const electrons=document.getElementById('vt-electrons');
+    const cathode=document.getElementById('vt-cathode');
+    const grid=document.getElementById('vt-grid');
+    const grid2=document.getElementById('vt-grid2');
+    const gridLbl=document.getElementById('vt-grid-lbl');
+    const anode=document.getElementById('vt-anode');
+    const sigWire=document.getElementById('vt-signal-wire');
+
+    track.classList.toggle('on',on);
+    lbl.textContent='Sinal na Grade: '+(on?'ON':'OFF');
+    lbl.classList.toggle('on',on);
+
+    // Cathode always glows
+    cathode.setAttribute('stroke',on?'#ff9800':'#f57c00');
+    cathode.setAttribute('filter',on?'url(#nofilter)':'');
+    cathode.style.filter=on?'drop-shadow(0 0 6px #ff9800)':'drop-shadow(0 0 4px #f57c00)';
+
+    // Grid color
+    const gc=on?'#3fb950':'#ff7b72';
+    grid.setAttribute('stroke',gc);
+    grid2.setAttribute('stroke',gc);
+    gridLbl.setAttribute('fill',gc);
+    sigWire.setAttribute('stroke',gc);
+
+    // Anode
+    anode.setAttribute('stroke',on?'#3fb950':'#888');
+    anode.style.filter=on?'drop-shadow(0 0 6px rgba(63,185,80,.4))':'none';
+
+    // Electrons
+    electrons.className=on?'vt-flowing':'vt-blocked';
+
+    // Output
+    out.textContent=on?'1 — corrente flui':'0 — bloqueado';
+    out.classList.toggle('on',on);
+  }
+
+  toggle.addEventListener('click',function(){
+    on=!on;
     update();
   });
 

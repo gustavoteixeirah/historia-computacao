@@ -1,0 +1,105 @@
+
+[Speaker 1]
+Gotcha. And the other thing is with the POM. I want to confirm, I see that your framework PR was merged, right?
+
+[Speaker 2]
+Yes.
+
+[Speaker 1]
+Okay, maybe, I guess maybe because we have the EMU migration, so the version, the release wasn't created automatically. So maybe we can do that later to create a non-snapshot version here?
+
+[Speaker 2]
+Oh, maybe you can help with that because I went to GitHub and I created a new tag and I thought that created the release. So then that didn't work then? I don't know how that works exactly.
+
+[Speaker 1]
+Yeah, yeah, yeah. Okay, I can do that for you. I guess that's because the EMU stuff, the migration maybe breaks it.
+
+So it didn't work automatically.
+
+[Speaker 2]
+Okay.
+
+[Speaker 1]
+Yeah, and the last thing I want to talk with you that's more complicated as this part, the journal entry. Yeah, so I think I'll go with the easier thing first. First thing, I think similar to what you already did in the loan transaction that you have, you call the add buy-down fee amortization to context here.
+
+I want to suggest that before this long step, you can also do that. By doing that, then we are saving this part. So we don't have to write this again.
+
+[Speaker 2]
+Okay, I think I get it. Okay.
+
+[Speaker 1]
+Yeah, the purpose is to reuse this context, this add to context method. So you can keep either the external ID or the ID in the past context.
+
+[Speaker 2]
+Okay, wait, can I record this just because I probably forget the name of this method?
+
+[Speaker 1]
+Sure. Do you mean this one or the other one?
+
+[Speaker 2]
+Yeah, the other one you just told me. I think I don't have the option. Oh, here, I found it.
+
+[Speaker 1]
+Yeah, it's the journal entry test. And then because they all, yeah, it's this one.
+
+[Speaker 2]
+Okay.
+
+[Speaker 1]
+Yeah.
+
+[Speaker 2]
+Mm-hmm.
+
+[Speaker 1]
+Yep, yep, yep. So that's one thing, I think. So that way we don't have to do another get loan by ID call.
+
+What you need is just because you said there was some issue with the GL account allocation. Yeah. I honestly think if this is the case, we have to review it because if either we fix the test or we find out if the application logic, the config has a problem.
+
+Because previously we had something and then E2E testing is having the issues and we catch it very late. So we have to fix it. Yeah, not at the best time.
+
+So if this is actually a problem, so I would like to know what's actually happening here. If this is something that should be fixed more urgently, then I want to report this to maybe Nikhil or someone else so we can have other people to fix the application logic.
+
+[Speaker 2]
+Mm-hmm. Okay.
+
+[Speaker 1]
+Yeah. Could you help me understand what's happening here? Do you mean that credit and debit didn't go to these two?
+
+[Speaker 2]
+Yeah. To be fair, I'm not sure because I created this test with Claude and yeah, I don't know. I'll have to investigate a little bit more just to understand it deeply because this is something that I personally don't understand very much.
+
+So I asked Claude to do it. Gotcha. Gotcha.
+
+[Speaker 1]
+So then I would like to ask about how did you run the test? So is it that when you call the validate journal entries that this doesn't work? Or is there something else?
+
+[Speaker 2]
+That was something I was testing in the pipeline, not locally. So I was testing there and then actually I remember that in some executions I added a lot of logs and then I copied the logs so I could process them in Claude related to those accounts.
+
+[Speaker 1]
+Gotcha. Okay. Yeah, I guess the simplest way if you want to test it locally will be to actually go into the database and then read through that.
+
+Do you have a log if you're running it in the pipeline? Do you have a link to that bill? So yeah, I do want to take a look at what are the journal entries that's being printed here.
+
+[Speaker 2]
+Yeah, I think I can run again and try to find the logs to send you.
+
+[Speaker 1]
+Yeah, sure. Thanks. Yeah, because if this is not going to these two, that's a big problem and I want to make sure things are working fine.
+
+[Speaker 2]
+Okay, so yes, I'll try to find those logs and send you.
+
+[Speaker 1]
+Yep, thank you. So I think a quick summary. I will try to create the release for the test framework and then send you the version.
+
+And then other than the other comments for this one for the journal entries, please try to add to context into the test steps so we don't have to write to get the amortization again. And then please also provide me the link to your CI build. So yeah, I want to check what's being printed up.
+
+[Speaker 2]
+Okay. Awesome.
+
+[Speaker 1]
+Yeah, that's it for me. Thank you, Ray. Thank you.
+
+Thank you. I'll see you later. Bye.
